@@ -3,3 +3,8 @@
 #include <qwidget.h>
 
 MainWindow::MainWindow(QWidget *parent) {}
+
+QLayout* MainWindow::createRootLayout()
+{
+    return nullptr;       
+}

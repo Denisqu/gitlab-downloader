@@ -144,3 +144,6 @@ iwyu/
 iwyu_build/
 # fuzzer logs
 fuzz-*.log
+# other
+.cache
+.vscode

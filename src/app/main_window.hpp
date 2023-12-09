@@ -1,6 +1,8 @@
-#pragma once
+#ifndef __MAIN_WINDOW_H__
+#define __MAIN_WINDOW_H__
+
 #include <QMainWindow>
-#include <qwidget.h>
+#include <QWidget>
 
 class MainWindow : public QMainWindow {
 private:
@@ -12,3 +14,6 @@ public:
 private:
   QLayout *createRootLayout();
 };
+
+
+#endif // __MAIN_WINDOW_H__
