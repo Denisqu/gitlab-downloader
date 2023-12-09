@@ -15,7 +15,7 @@ QLayout *MainWindow::createRootLayout() {
   const auto layout = []() {
     const auto boxLayout = new QVBoxLayout();
     const auto labelTest = new QLabel();
-    labelTest->setText("This is a Test Text!");
+    labelTest->setText("This is a Test Text #0 !");
     boxLayout->addWidget(labelTest);
 
     return boxLayout;
