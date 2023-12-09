@@ -15,5 +15,4 @@ private:
   QLayout *createRootLayout();
 };
 
-
 #endif // __MAIN_WINDOW_H__
