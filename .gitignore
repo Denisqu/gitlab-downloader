@@ -144,6 +144,8 @@ iwyu/
 iwyu_build/
 # fuzzer logs
 fuzz-*.log
-# other
+
+# my, other
 .cache
 .vscode
+CMakeLists.txt.user
