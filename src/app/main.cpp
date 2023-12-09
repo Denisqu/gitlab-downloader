@@ -26,20 +26,10 @@ if (AttachConsole(ATTACH_PARENT_PROCESS)) {
 }
 #endif
 
-
   std::cout << "this is from cout before qDebug!" << std::endl;
   qDebug() << "qDebug before qapplication...";
-  std::cout << "this-is-from-cout" << std::endl;
-
-  // QScopedPointer<QCoreApplication> app(createApplication(argc, argv));
-
-  // if (qobject_cast<QApplication *>(app.data())) {
-  //  start GUI version...
-  //} else {
-  // start non-GUI version...
-  //  qDebug() << "debug version started!";
-  //}
-
+  std::cout << "this-is-from-cout" << std::endl;  
+  auto a = 11;
   int t = 11;
   std::cin >> t;
   std::cout << t << std::endl;

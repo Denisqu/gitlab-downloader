@@ -29,6 +29,7 @@ set_target_properties(Qt5::Core PROPERTIES MAP_IMPORTED_CONFIG_COVERAGE "DEBUG")
 
 set(PROJECT_SOURCES
         main.cpp
+        main_window.cpp main_window.hpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

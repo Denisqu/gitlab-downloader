@@ -1,0 +1,5 @@
+C:/git-repos/gitlab-downloader/src/build-app-Desktop_Qt_5_15_2_MSVC2019_64bit-Release/CMakeFiles/gitlab-downloader.dir
+C:/git-repos/gitlab-downloader/src/build-app-Desktop_Qt_5_15_2_MSVC2019_64bit-Release/CMakeFiles/edit_cache.dir
+C:/git-repos/gitlab-downloader/src/build-app-Desktop_Qt_5_15_2_MSVC2019_64bit-Release/CMakeFiles/rebuild_cache.dir
+C:/git-repos/gitlab-downloader/src/build-app-Desktop_Qt_5_15_2_MSVC2019_64bit-Release/CMakeFiles/gitlab-downloader_autogen_timestamp_deps.dir
+C:/git-repos/gitlab-downloader/src/build-app-Desktop_Qt_5_15_2_MSVC2019_64bit-Release/CMakeFiles/gitlab-downloader_autogen.dir

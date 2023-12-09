@@ -24,12 +24,8 @@ def main(*args):
     try:
         p = subprocess.run(['cmake', "../src/app/"] + cmake_args, cwd=build_dir, check=True)
         p = subprocess.run(['cmake', '--build', '.'], cwd=build_dir, check=True)
-        #p = subprocess.run([exe, *args], cwd=build_dir, capture_output=True, text=True)
-        #proc = subprocess.Popen([exe, *args], stdin = subprocess.PIPE, stdout=subprocess.PIPE,universal_newlines=True, shell=True)
-        #stdout, stderr = proc.communicate(str.encode(' '.join(exe,*args)))
-        #print(stdout, stderr)
-
-        #print(p.stdout, colored(p.stderr, 'red'))
+        p = subprocess.run([exe, *args], cwd=build_dir, capture_output=True, text=True)
+        print(p.stdout, colored(p.stderr, 'red'))
     except KeyboardInterrupt:
         p.terminate()    
     except Exception as e:
