@@ -2,6 +2,7 @@
 #define __MAIN_SCREEN_WIDGET_H__
 
 #include <QWidget>
+#include <qlayout.h>
 #include <qobjectdefs.h>
 
 class MainScreenWidget : public QWidget {
@@ -9,6 +10,11 @@ class MainScreenWidget : public QWidget {
 
 public:
   explicit MainScreenWidget(QWidget *parent = nullptr);
+
+private:
+  QLayout *createRootLayout();
+  QLayout *createTopLayout();
+  QLayout *createBottomLayout();
 };
 
 #endif // __MAIN_SCREEN_WIDGET_H__
