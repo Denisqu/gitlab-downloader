@@ -23,6 +23,7 @@
               "state": {
                 "file": "App design.md",
                 "mode": "source",
+                "backlinks": false,
                 "source": false
               }
             }
@@ -36,9 +37,22 @@
                 "file": "Excalidraw/Drawing 2023-12-10 10.46.03.excalidraw.md"
               }
             }
+          },
+          {
+            "id": "44e0f0b499066b10",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "App design.md",
+                "mode": "source",
+                "backlinks": false,
+                "source": false
+              }
+            }
           }
         ],
-        "currentTab": 2
+        "currentTab": 3
       }
     ],
     "direction": "vertical"
@@ -104,7 +118,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Excalidraw/Drawing 2023-12-10 10.46.03.excalidraw.md",
+                "file": "App design.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -127,7 +141,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Excalidraw/Drawing 2023-12-10 10.46.03.excalidraw.md"
+                "file": "App design.md"
               }
             }
           }
@@ -149,8 +163,9 @@
       "obsidian-excalidraw-plugin:Create new drawing": false
     }
   },
-  "active": "8adab3d175e32ab6",
+  "active": "44e0f0b499066b10",
   "lastOpenFiles": [
+    "SQLite Architecture.md",
     "App architecture.md",
     "Excalidraw/Drawing 2023-12-10 10.46.03.excalidraw.md",
     "App design.md",

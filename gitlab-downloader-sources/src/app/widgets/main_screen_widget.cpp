@@ -39,15 +39,11 @@ QLayout *MainScreenWidget::createTopLayout() {
         new QLabel("Refreshed last time:\nHere-Will-Be-Refreshed-Last-Time");
     refresedLastTimeLabel->setSizePolicy(QSizePolicy::Minimum,
                                          QSizePolicy::Minimum);
-    const auto settingsButton = new QPushButton("Settings");
-    settingsButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+
     layout->addWidget(labelStatus, 0, Qt::AlignLeft);
     layout->addWidget(refresedLastTimeLabel, 0, Qt::AlignLeft);
     layout->addStretch();
-    layout->addWidget(settingsButton, 0, Qt::AlignRight);
-
-    QObject::connect(settingsButton, &QPushButton::clicked, this,
-                     &MainScreenWidget::settingsButtonClicked);
+    layout->addWidget(createSettingsButton(), 0, Qt::AlignRight);
 
     return layout;
   }();
@@ -70,4 +66,13 @@ QLayout *MainScreenWidget::createBottomLayout() {
   }();
 
   return bottomLayout;
+}
+
+QPushButton *MainScreenWidget::createSettingsButton() {
+  const auto settingsButton = new QPushButton("Settings");
+  settingsButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+  QObject::connect(settingsButton, &QPushButton::clicked, this,
+                   &MainScreenWidget::settingsButtonClicked);
+
+  return settingsButton;
 }

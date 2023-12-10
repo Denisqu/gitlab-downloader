@@ -4,6 +4,9 @@
 #include <QWidget>
 #include <qlayout.h>
 #include <qobjectdefs.h>
+#include <qpushbutton.h>
+
+class QPushButton;
 
 class MainScreenWidget : public QWidget {
   Q_OBJECT
@@ -18,6 +21,8 @@ private:
   QLayout *createRootLayout();
   QLayout *createTopLayout();
   QLayout *createBottomLayout();
+
+  QPushButton *createSettingsButton();
 };
 
 #endif // __MAIN_SCREEN_WIDGET_H__
