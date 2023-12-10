@@ -11,6 +11,9 @@ class MainScreenWidget : public QWidget {
 public:
   explicit MainScreenWidget(QWidget *parent = nullptr);
 
+signals:
+  void settingsButtonClicked();
+
 private:
   QLayout *createRootLayout();
   QLayout *createTopLayout();
