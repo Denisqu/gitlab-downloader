@@ -23,7 +23,8 @@ def main(*args):
     
     try:
         #p = subprocess.run(['cmake', "../src/app/"] + cmake_args, cwd=build_dir, check=True)
-        p = subprocess.run(['cmake', "."] + cmake_args, cwd=build_dir, check=True)
+        #p = subprocess.run(['cmake', "."] + cmake_args, cwd=build_dir, check=True)
+        p = subprocess.run(['cmake', ".", f'-B{build_dir}'] + cmake_args, check=True)
         p = subprocess.run(['cmake', '--build', '.'], cwd=build_dir, check=True)
         p = subprocess.run([exe, *args], cwd=build_dir, capture_output=True, text=True)
         print(p.stdout, colored(p.stderr, 'red'))

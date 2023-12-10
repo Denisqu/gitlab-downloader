@@ -149,3 +149,7 @@ fuzz-*.log
 .cache
 .vscode
 CMakeLists.txt.user
+CMakeFiles
+CMakeCache.txt
+cmake_install.cmake
+build.ninja

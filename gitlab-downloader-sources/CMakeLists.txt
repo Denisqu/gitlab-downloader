@@ -6,6 +6,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
+
+
+add_subdirectory(src/lib/DBLib)
 add_subdirectory(src/app)
-add_subdirectory(src/lib)
-add_subdirectory(test)
+#add_subdirectory(test)

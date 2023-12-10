@@ -4,6 +4,7 @@
 #include <qboxlayout.h>
 #include <qlabel.h>
 #include <qnamespace.h>
+#include <qobject.h>
 #include <qpushbutton.h>
 #include <qsizepolicy.h>
 
@@ -29,7 +30,7 @@ QLayout *MainScreenWidget::createRootLayout() {
 }
 
 QLayout *MainScreenWidget::createTopLayout() {
-  const auto topLayout = []() {
+  const auto topLayout = [this]() {
     const auto layout = new QHBoxLayout();
     const auto labelStatus =
         new QLabel("Current status:\nHere-Will-Be-Current-Status");
@@ -44,6 +45,9 @@ QLayout *MainScreenWidget::createTopLayout() {
     layout->addWidget(refresedLastTimeLabel, 0, Qt::AlignLeft);
     layout->addStretch();
     layout->addWidget(settingsButton, 0, Qt::AlignRight);
+
+    QObject::connect(settingsButton, &QPushButton::clicked, this,
+                     &MainScreenWidget::settingsButtonClicked);
 
     return layout;
   }();

@@ -56,7 +56,12 @@ else()
     endif()
 endif()
 
-target_link_libraries(gitlab-downloader PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::WebSockets)
+target_link_libraries(gitlab-downloader PRIVATE
+    Qt${QT_VERSION_MAJOR}::Widgets
+    Qt${QT_VERSION_MAJOR}::Network
+    Qt${QT_VERSION_MAJOR}::WebSockets
+    db-lib
+)
 
 set_target_properties(gitlab-downloader PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
@@ -65,7 +70,6 @@ set_target_properties(gitlab-downloader PROPERTIES
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
-
 
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(gitlab-downloader)

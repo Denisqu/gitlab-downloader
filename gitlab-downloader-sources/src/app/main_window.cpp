@@ -14,9 +14,15 @@ MainWindow::MainWindow(QWidget *parent) {
   QStackedWidget *centralStackedWidget =
       qobject_cast<QStackedWidget *>(centralWidget());
 
-  centralStackedWidget->addWidget(new MainScreenWidget);
+  const auto mainScreenWidget = new MainScreenWidget();
 
-  // centralWidget()->setLayout(createRootLayout());
+  // only for debug
+  connect(mainScreenWidget, &MainScreenWidget::settingsButtonClicked,
+          centralStackedWidget, [centralStackedWidget]() {
+            centralStackedWidget->setCurrentIndex(1);
+          });
+  centralStackedWidget->addWidget(mainScreenWidget);
+  centralStackedWidget->addWidget(new QWidget);
 }
 
 QLayout *MainWindow::createRootLayout() {
