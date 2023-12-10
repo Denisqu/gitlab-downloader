@@ -1,9 +1,7 @@
 #include "main_window.hpp"
 #include <QApplication>
 #include <QDebug>
-#include <iostream>
 #include <qapplication.h>
-#include <string>
 
 #ifdef _WIN32
 #include <Windows.h>

@@ -13,7 +13,7 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Widgets Sql)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets Sql)
 
 add_library(db-lib SHARED
-  dbmanager.cpp dbmanager.hpp
+  db_manager.cpp db_manager.hpp
   dblib-export.hpp
 )
 
