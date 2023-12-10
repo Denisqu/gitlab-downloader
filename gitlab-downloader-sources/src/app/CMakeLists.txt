@@ -71,6 +71,12 @@ set_target_properties(gitlab-downloader PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
+target_compile_definitions(gitlab-downloader PRIVATE
+    $<$<CONFIG:Debug>:
+        DEBUG=1
+    >
+)
+
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(gitlab-downloader)
 endif()

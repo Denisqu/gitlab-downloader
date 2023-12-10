@@ -23,4 +23,6 @@ target_link_libraries(db-lib PRIVATE
     Qt${QT_VERSION_MAJOR}::Sql
 )
 
+
+
 target_compile_definitions(db-lib PRIVATE DBLIB_LIBRARY)
