@@ -2,11 +2,17 @@
 #define __DBMANAGER_H__
 
 #include "dblib-export.hpp"
+#include <memory>
 
 /*
 Перед написанием этого класса нужно досмотреть
 курс по архитектуре ПО от CSC.
 */
-class DBLIB_EXPORT DBManager {};
+template <typename DBHandlerT> class DBLIB_EXPORT DBManager {
+
+  explicit DBManager();
+
+  std::shared_ptr<DBHandlerT> m_DBHandler;
+};
 
 #endif // __DBMANAGER_H__
