@@ -10,9 +10,13 @@
 */
 template <typename DBHandlerT> class DBLIB_EXPORT DBManager {
 
+public:
   explicit DBManager();
 
-  std::shared_ptr<DBHandlerT> m_DBHandler;
+private:
+  DBHandlerT *createDBHandler();
+
+  std::unique_ptr<DBHandlerT> m_DBHandler = nullptr;
 };
 
 #endif // __DBMANAGER_H__
