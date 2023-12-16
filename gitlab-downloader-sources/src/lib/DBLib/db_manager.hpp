@@ -5,8 +5,7 @@
 #include <memory>
 
 /*
-Перед написанием этого класса нужно досмотреть
-курс по архитектуре ПО от CSC.
+Класс, инкапсулирующий логику работы с БД<ТипБД>
 */
 template <typename DBHandlerT> class DBLIB_EXPORT DBManager {
 
@@ -16,7 +15,7 @@ public:
 private:
   DBHandlerT *createDBHandler();
 
-  std::unique_ptr<DBHandlerT> m_DBHandler = nullptr;
+  std::unique_ptr<DBHandlerT> m_DBHandler;
 };
 
 #endif // __DBMANAGER_H__

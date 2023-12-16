@@ -10,9 +10,6 @@ private:
 
 public:
   explicit MainWindow(QWidget *parent = nullptr);
-
-private:
-  QLayout *createRootLayout();
 };
 
 #endif // __MAIN_WINDOW_H__

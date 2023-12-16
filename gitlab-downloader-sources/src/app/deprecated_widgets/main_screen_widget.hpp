@@ -21,7 +21,6 @@ private:
   QLayout *createRootLayout();
   QLayout *createTopLayout();
   QLayout *createBottomLayout();
-
   QPushButton *createSettingsButton();
 };
 

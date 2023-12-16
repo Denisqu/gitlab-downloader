@@ -4,7 +4,7 @@
 class IDBHandler {
   virtual void handle() = 0;
 };
-
+// only for debug:
 class SQLiteHandeler : IDBHandler {
   void handle() override;
 };

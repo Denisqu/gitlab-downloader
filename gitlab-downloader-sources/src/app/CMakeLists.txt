@@ -18,8 +18,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
 set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Network WebSockets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network WebSockets)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Network WebSockets Quick)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network WebSockets Quick)
 
 set(CMAKE_CXX_FLAGS_COVERAGE "${CMAKE_CXX_FLAGS_RELEASE} -fprofile-arcs -ftest-coverage")
 
@@ -27,11 +27,22 @@ set(CMAKE_CXX_FLAGS_COVERAGE "${CMAKE_CXX_FLAGS_RELEASE} -fprofile-arcs -ftest-c
 # used in the COVERAGE CMake configuration.
 set_target_properties(Qt5::Core PROPERTIES MAP_IMPORTED_CONFIG_COVERAGE "DEBUG")
 
+add_definitions("-DQPM_INIT\\(E\\)=E.addImportPath\\(QStringLiteral\\(\\\"qrc:/\\\"\\)\\)\\;")
+
+#include(external/material/vendor.cmake)
+set(FLUENTUI_DIRECTORY ${CMAKE_CURRENT_LIST_DIR})
+option(FLUENTUI_BUILD_EXAMPLES "Build FluentUI demo applications." OFF)
+option(FLUENTUI_BUILD_STATIC_LIB "Build static library." OFF)
+
+add_subdirectory(external/fluent)
+
 set(PROJECT_SOURCES
+        ${VENDOR_SOURCES}
         main.cpp
-        main_window.cpp main_window.hpp
-        widgets/main_screen_widget.cpp widgets/main_screen_widget.hpp
+        qml/qml.qrc
 )
+
+message(root_proj_dir = "${ROOT_PROJECT_DIR}")
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(gitlab-downloader
@@ -60,7 +71,9 @@ target_link_libraries(gitlab-downloader PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::Network
     Qt${QT_VERSION_MAJOR}::WebSockets
-    db-lib
+    Qt${QT_VERSION_MAJOR}::Quick
+   # db-lib
+    fluentuiplugin
 )
 
 set_target_properties(gitlab-downloader PROPERTIES
@@ -71,11 +84,8 @@ set_target_properties(gitlab-downloader PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
-target_compile_definitions(gitlab-downloader PRIVATE
-    $<$<CONFIG:Debug>:
-        DEBUG=1
-    >
-)
+target_compile_definitions(gitlab-downloader
+  PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(gitlab-downloader)

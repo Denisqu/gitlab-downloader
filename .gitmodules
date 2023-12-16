@@ -1,0 +1,3 @@
+[submodule "gitlab-downloader-sources/src/app/external/fluent"]
+	path = gitlab-downloader-sources/src/app/external/fluent
+	url = https://github.com/zhuzichu520/FluentUI
