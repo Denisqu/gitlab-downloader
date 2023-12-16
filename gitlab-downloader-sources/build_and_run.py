@@ -14,9 +14,9 @@ def main(*args):
         os.makedirs(build_dir)
 
     if platform.system() == 'Windows':
-        exe = os.path.join(build_dir, 'gitlab-downloader.exe')
+        exe = os.path.join(build_dir, 'qml-impl.exe')
     else:
-        exe = os.path.join(build_dir, 'gitlab-downloader')
+        exe = os.path.join(build_dir, 'qml-impl')
 
     cmake_args = ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + build_dir]
     cmake_args += ['-G', 'Ninja']
