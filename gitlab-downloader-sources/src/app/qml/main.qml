@@ -9,59 +9,55 @@ import QtQuick.Window 2.15
 ApplicationWindow {
     title: "Buttons"
     visible: true
+    height: 600
+    width: 900
+    minimumHeight: 600
+    minimumWidth: 900
 
-    FluText {
-        Layout.topMargin: 20
-        text: "flu text..."
+    ColumnLayout {
+        anchors.fill: parent
+
+
+        RowLayout {
+            Layout.fillHeight: false
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignCenter
+            FluText {
+                Layout.alignment: Qt.AlignLeft
+                text: "Current status: No downloads needed"
+            }
+            FluText {
+                Layout.alignment: Qt.AlignLeft
+                text: "Refreshed last time: 10.12.2023 11:01"
+            }
+            FluButton {
+                text: "Settings"
+                Layout.alignment: Qt.AlignRight
+            }
+        }
+
+        ListView {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            Layout.alignment: Qt.AlignCenter
+            model: TestModel {}
+            delegate: Text {
+                text: name + ": " + number
+            }
+        }
+
+        RowLayout {
+            Layout.fillHeight: false
+            Layout.alignment: Qt.AlignRight
+            FluButton {
+                text: "Refresh all"
+                Layout.alignment: Qt.AlignRight
+            }
+            FluButton {
+                text: "Download new artifacts"
+                Layout.alignment: Qt.AlignRight
+            }
+        }
     }
-
-    FluArea {
-        Layout.fillWidth: true
-        height: 68
-        paddings: 10
-        Layout.topMargin: 20
-
-        FluTextButton {
-            disabled: text_button_switch.checked
-            text: "Text Button"
-            contentDescription: "content description"
-            onClicked: {
-                showInfo("Text Button");
-            }
-
-            anchors {
-                verticalCenter: parent.verticalCenter
-                left: parent.left
-            }
-
-        }
-
-        FluToggleSwitch {
-            id: text_button_switch
-
-            text: "Disabled"
-
-            anchors {
-                right: parent.right
-                verticalCenter: parent.verticalCenter
-            }
-
-        }
-
-        FluTextBox {
-            id: textbox
-
-            text: "TextBox!!"
-        }
-
-        FluIcon {
-            id: icon
-        }
-
-        FluCheckBox {
-            text: "checkbox"
-        }
-
-    }
-
 }

@@ -10,4 +10,7 @@
 ### Потом
 1) Добавить SQLite в проект [ ]
 1) Добавить Logger в проект [ ]
-1) Добавить QSS стайлинг [ ]
+
+
+### Полезные Ресурсы для проекта
+1) QML Book: https://distracted-dijkstra-f5d508.netlify.app/

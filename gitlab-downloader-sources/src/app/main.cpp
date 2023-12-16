@@ -33,7 +33,9 @@ int main(int argc, char **argv) {
   QGuiApplication app(argc, argv);
 
   QQmlApplicationEngine engine;
-  // QPM_INIT(engine)
+  qputenv("QSG_RHI_BACKEND", "opengl");
+  qputenv("QT_D3D_NO_FLIP", "1");
+
   const QUrl url(QStringLiteral("qrc:/main.qml"));
   QObject::connect(
       &engine, &QQmlApplicationEngine::objectCreated, &app,
