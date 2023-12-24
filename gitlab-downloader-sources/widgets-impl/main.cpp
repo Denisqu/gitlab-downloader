@@ -12,7 +12,6 @@ int main(int argc, char **argv) {
 // attach console on win32
 #if defined(_WIN32) && defined(DEBUG)
   if (AttachConsole(ATTACH_PARENT_PROCESS)) {
-
     freopen("CONOUT$", "w", stdout);
     freopen("CONOUT$", "w", stderr);
   }

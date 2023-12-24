@@ -1,20 +1,25 @@
 #include "db_manager.hpp"
+#include <QSqlDatabase>
 
-// only for debug:
-class IDBHandler {
-  virtual void handle() = 0;
-};
-// only for debug:
-class SQLiteHandeler : IDBHandler {
-  void handle() override;
-};
+DatabaseManager *DatabaseManager::m_instance = nullptr;
 
-template <typename DBHandlerT>
-DBManager<DBHandlerT>::DBManager() : m_DBHandler(createDBHandler()) {}
+DatabaseManager::DatabaseManager(const QString &path)
+    : m_database(std::make_unique<QSqlDatabase>(
+          QSqlDatabase::addDatabase("QSQLITE"))) {
+  m_database->setDatabaseName(path);
+  m_database->open();
+}
 
-template <typename DBHandlerT>
-DBHandlerT *DBManager<DBHandlerT>::createDBHandler() {
-  static_assert(std::is_base_of<IDBHandler, DBHandlerT>::value,
-                "DBHandler is not derived from IDBHandler");
-  return new DBHandlerT();
+DatabaseManager &
+DatabaseManager::init(const QString &path = DATABASE_FILENAME) {
+  if (m_instance == nullptr) {
+    m_instance = new DatabaseManager(path);
+    return *m_instance;
+  }
+
+  return *m_instance;
+}
+
+DatabaseManager &DatabaseManager::instance() {
+  return m_instance ? *m_instance : init();
 }

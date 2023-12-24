@@ -14,17 +14,18 @@ def main(*args):
         os.makedirs(build_dir)
 
     if platform.system() == 'Windows':
-        exe = os.path.join(build_dir, 'qml-impl.exe')
+        exe = os.path.join(build_dir, 'widgets-impl.exe')
     else:
-        exe = os.path.join(build_dir, 'qml-impl')
+        exe = os.path.join(build_dir, 'widgets-impl')
 
     cmake_args = ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + build_dir]
     cmake_args += ['-G', 'Ninja']
-    
+    #cmake_args += '-DCMAKE_EXPORT_COMPILE_COMMANDS=ON'
+
     try:
         #p = subprocess.run(['cmake', "../src/app/"] + cmake_args, cwd=build_dir, check=True)
         #p = subprocess.run(['cmake', "."] + cmake_args, cwd=build_dir, check=True)
-        p = subprocess.run(['cmake', ".", f'-B{build_dir}', '-D', 'CMAKE_BUILD_TYPE=Debug'] + cmake_args, check=True)
+        p = subprocess.run(['cmake', ".", f'-B{build_dir}', '-D', 'CMAKE_BUILD_TYPE=Debug', 'CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON'] + cmake_args, check=True)
         p = subprocess.run(['cmake', '--build', '.'], cwd=build_dir, check=True)
         p = subprocess.run([exe, *args], cwd=build_dir, capture_output=True, text=True)
         print(p.stdout, colored(p.stderr, 'red'))

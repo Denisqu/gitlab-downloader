@@ -2,20 +2,27 @@
 #define __DBMANAGER_H__
 
 #include "dblib-export.hpp"
+#include <QString>
 #include <memory>
 
-/*
-Класс, инкапсулирующий логику работы с БД<ТипБД>
-*/
-template <typename DBHandlerT> class DBLIB_EXPORT DBManager {
+class QSqlDatabase;
 
+const QString DATABASE_FILENAME = "name.db";
+
+/*
+Класс, инкапсулирующий логику работы с БД
+*/
+class DBLIB_EXPORT DatabaseManager {
 public:
-  explicit DBManager();
+  static DatabaseManager &instance();
+  static DatabaseManager &init(const QString &path);
+
+protected:
+  explicit DatabaseManager(const QString &path);
 
 private:
-  DBHandlerT *createDBHandler();
-
-  std::unique_ptr<DBHandlerT> m_DBHandler;
+  static DatabaseManager *m_instance;
+  std::unique_ptr<QSqlDatabase> m_database;
 };
 
 #endif // __DBMANAGER_H__
