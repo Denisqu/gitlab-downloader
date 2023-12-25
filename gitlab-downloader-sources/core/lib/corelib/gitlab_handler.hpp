@@ -17,7 +17,8 @@ private slots:
 
 private:
   std::unique_ptr<QNetworkAccessManager> m_networkManager;
-  void sendRequest(const QNetworkRequest &request);
+  QNetworkReply *sendRequest(const QNetworkRequest &request);
+  void processTestReply(QNetworkReply *reply);
 };
 
 #endif // __GITLAB_HANDLER_H__
