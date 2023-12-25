@@ -33,7 +33,6 @@ int main(int argc, char **argv) {
   QApplication app{argc, argv};
   MainWindow mainWindow{};
   mainWindow.show();
-
   auto gitlabHandler = new GitlabHandler(&app);
 
   qInfo() << "Starting the application!";
