@@ -62,7 +62,8 @@ target_link_libraries(widgets-impl PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::Network
     Qt${QT_VERSION_MAJOR}::WebSockets
-    )
+    CuteLogger
+)
 
 set_target_properties(widgets-impl PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com

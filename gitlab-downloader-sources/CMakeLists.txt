@@ -9,6 +9,9 @@ set(CMAKE_AUTORCC ON)
 
 set(ROOT_PROJECT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
+set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
+set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
+add_subdirectory(external/CuteLogger)
 add_subdirectory(core)
 add_subdirectory(widgets-impl)
 add_subdirectory(qml-impl)

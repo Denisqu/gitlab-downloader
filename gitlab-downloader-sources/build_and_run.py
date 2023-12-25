@@ -20,19 +20,22 @@ def main(*args):
 
     cmake_args = ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + build_dir]
     cmake_args += ['-G', 'Ninja']
-    #cmake_args += '-DCMAKE_EXPORT_COMPILE_COMMANDS=ON'
 
     try:
         #p = subprocess.run(['cmake', "../src/app/"] + cmake_args, cwd=build_dir, check=True)
         #p = subprocess.run(['cmake', "."] + cmake_args, cwd=build_dir, check=True)
         p = subprocess.run(['cmake', ".", f'-B{build_dir}', '-D', 'CMAKE_BUILD_TYPE=Debug', 'CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON'] + cmake_args, check=True)
         p = subprocess.run(['cmake', '--build', '.'], cwd=build_dir, check=True)
-        p = subprocess.run([exe, *args], cwd=build_dir, capture_output=True, text=True)
+        #p = subprocess.run([exe, *args], cwd=build_dir, capture_output=True, text=True)
         print(p.stdout, colored(p.stderr, 'red'))
+        proc = subprocess.Popen([exe, *args], cwd=build_dir, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    
     except KeyboardInterrupt:
         p.terminate()    
     except Exception as e:
         print(colored(e, 'red'))
+    for line in proc.stdout:
+        print(line)
 
 if __name__ == '__main__':
     args = []

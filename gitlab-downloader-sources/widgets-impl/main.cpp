@@ -1,7 +1,11 @@
 #include "main_window.hpp"
+#include <ConsoleAppender.h>
+#include <FileAppender.h>
+#include <Logger.h>
 #include <QApplication>
 #include <QDebug>
 #include <QFile>
+#include <memory>
 #include <qapplication.h>
 
 #ifdef _WIN32
@@ -18,9 +22,22 @@ int main(int argc, char **argv) {
   qDebug() << "RUNNING APP IN DEBUG MODE...";
 #endif
 
+  auto consoleAppender = std::make_unique<ConsoleAppender>();
+  consoleAppender->setFormat("[%{type:-7}] <%{Function}> %{message}\n");
+  cuteLogger->registerAppender(consoleAppender.get());
+  auto fileAppender = std::make_unique<FileAppender>("widgets-impl.log");
+  cuteLogger->registerAppender(fileAppender.get());
+
   QApplication app{argc, argv};
   MainWindow mainWindow{};
   mainWindow.show();
 
-  return app.exec();
+  qInfo() << "Starting the application!";
+  auto result = app.exec();
+  qInfo() << "Closing application!";
+
+  if (result)
+    qWarning() << "Something went wrong."
+               << "Result code is" << result;
+  return result;
 }
