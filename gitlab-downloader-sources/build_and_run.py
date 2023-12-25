@@ -18,15 +18,16 @@ def main(*args):
     else:
         exe = os.path.join(build_dir, 'widgets-impl')
 
+    for arg in args:
+        if arg in ['test', 'tests', 't']:
+            exe = os.path.join(build_dir, 'core-tests.exe')
+
     cmake_args = ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + build_dir]
     cmake_args += ['-G', 'Ninja']
 
     try:
-        #p = subprocess.run(['cmake', "../src/app/"] + cmake_args, cwd=build_dir, check=True)
-        #p = subprocess.run(['cmake', "."] + cmake_args, cwd=build_dir, check=True)
-        p = subprocess.run(['cmake', ".", f'-B{build_dir}', '-D', 'CMAKE_BUILD_TYPE=Debug', 'CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON'] + cmake_args, check=True)
+        p = subprocess.run(['cmake', ".", f'-B{build_dir}', '-D', 'CMAKE_BUILD_TYPE=Debug', '-DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON'] + cmake_args, check=True)
         p = subprocess.run(['cmake', '--build', '.'], cwd=build_dir, check=True)
-        #p = subprocess.run([exe, *args], cwd=build_dir, capture_output=True, text=True)
         print(p.stdout, colored(p.stderr, 'red'))
         proc = subprocess.Popen([exe, *args], cwd=build_dir, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     
@@ -41,4 +42,5 @@ if __name__ == '__main__':
     args = []
     if len(sys.argv) > 1:
         args += sys.argv[1:]
+        print(args)
     main(*args)

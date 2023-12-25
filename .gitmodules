@@ -7,3 +7,6 @@
 [submodule "gitlab-downloader-sources/external/CuteLogger"]
 	path = gitlab-downloader-sources/external/CuteLogger
 	url = git@github.com:dept2/CuteLogger.git
+[submodule "gitlab-downloader-sources/external/asyncfuture"]
+	path = gitlab-downloader-sources/external/asyncfuture
+	url = https://github.com/vpicaver/asyncfuture

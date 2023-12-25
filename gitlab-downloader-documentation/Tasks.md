@@ -1,9 +1,10 @@
 ### Сейчас
+1) Написать логику для gitlab_handler.cpp с помощью QFuture (https://www.qt.io/blog/asynchronous-apis-in-qt-6, https://doc.qt.io/qt-6/qfuture.html#details), QPromise, TDD [ ]
 1) Написать логику для db_manager с помощью TDD (сделать как здесь: https://github.com/Denisqu/qt-cxx-reference-projects/blob/main/projects/ch03-gallery-core/gallery-core/DatabaseManager.cpp) [ ]
 
 ### Потом
-1) Сделать наброс UI на FluentUI QML [ ]
 1) Почистить CMake файлы от мусора. [ ] 
+1) Сделать наброс UI на FluentUI QML [ ]
 
 ### Полезные Ресурсы для проекта
 1) QML Book: https://distracted-dijkstra-f5d508.netlify.app/

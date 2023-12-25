@@ -1,3 +1,4 @@
+#include "../core/lib/corelib/gitlab_handler.hpp"
 #include "main_window.hpp"
 #include <ConsoleAppender.h>
 #include <FileAppender.h>
@@ -22,6 +23,7 @@ int main(int argc, char **argv) {
   qDebug() << "RUNNING APP IN DEBUG MODE...";
 #endif
 
+  // Logger
   auto consoleAppender = std::make_unique<ConsoleAppender>();
   consoleAppender->setFormat("[%{type:-7}] <%{Function}> %{message}\n");
   cuteLogger->registerAppender(consoleAppender.get());
@@ -31,6 +33,8 @@ int main(int argc, char **argv) {
   QApplication app{argc, argv};
   MainWindow mainWindow{};
   mainWindow.show();
+
+  auto gitlabHandler = new GitlabHandler(&app);
 
   qInfo() << "Starting the application!";
   auto result = app.exec();

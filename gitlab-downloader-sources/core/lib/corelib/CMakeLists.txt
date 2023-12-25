@@ -14,8 +14,8 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Widgets Network)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets Network)
 
 add_library(core-lib SHARED
-  #db_manager.cpp db_manager.hpp
-  #dblib-export.hpp
+  corelib-export.hpp
+  gitlab_handler.cpp gitlab_handler.hpp
 )
 
 target_link_libraries(core-lib PRIVATE
