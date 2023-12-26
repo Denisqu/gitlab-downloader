@@ -1,7 +1,9 @@
 #include "gitlab_handler.hpp"
 #include "../../../external/asyncfuture/asyncfuture.h"
+#include <QCoroNetworkReply>
 #include <QFuture>
 #include <QNetworkReply>
+#include <QtConcurrent>
 #include <qfuture.h>
 #include <qnetworkreply.h>
 #include <qnetworkrequest.h>
@@ -19,21 +21,19 @@ auto future = QtFuture::connect(reply, &QNetworkReply::finished)
         ...
 */
 
-namespace {} // namespace
-
-GitlabHandler::GitlabHandler(QObject *parent)
-    : m_networkManager(std::make_unique<QNetworkAccessManager>(this)) {
-  auto request = [] {
-    QUrl url("http://www.testingmcafeesites.com/index.html");
-    QNetworkRequest request;
-    request.setUrl(url);
-    return request;
-  }();
-  auto reply = m_networkManager->get(request);
-  processTestReply(reply);
+namespace {
+QCoro::Task<> testTask() {
+  QNetworkAccessManager *manager = new QNetworkAccessManager();
+  auto *reply = co_await manager->get(
+      QNetworkRequest{QStringLiteral("https://.../api/fetch")});
+  const auto data = reply->readAll();
+  qDebug() << data;
+  reply->deleteLater();
 }
+} // namespace
 
 // TODO: переписать красиво, проверить на утечки
+/*
 void GitlabHandler::processTestReply(QNetworkReply *reply) {
   // см. https://github.com/vpicaver/asyncfuture
   auto future = QFuture<void>(
@@ -60,7 +60,38 @@ void GitlabHandler::processTestReply(QNetworkReply *reply) {
 
   auto future2 =
       AsyncFuture::observe(future).subscribe(onCompletedFuture2).future();
+
+  future.then([]() { qDebug() << "test"; });
+} */
+
+GitlabHandler::GitlabHandler(QObject *parent)
+    : m_networkManager(std::make_unique<QNetworkAccessManager>(this)) {
+
+  // connect(reply, &QNetworkReply::finished,
+  //         [this, reply]() { processTestReply(reply); });
+  /*
+  QtFuture::connect(reply, &QNetworkReply::finished)
+      .then([reply, this] {
+        return sendRequest(
+            QNetworkRequest({"http://www.testingmcafeesites.com/index.html"}));
+      })
+      .then([](QNetworkReply *reply) {
+
+      });
+  */
+
+  /*
+  auto request = [] {
+    QUrl url("http://www.testingmcafeesites.com/index.html");
+    QNetworkRequest request;
+    request.setUrl(url);
+    return request;
+  }();
+  */
+  testTask();
 }
+
+void GitlabHandler::processTestReply(QNetworkReply *reply) {}
 
 // TODO: возможно нужно удлаить эту функцию
 void GitlabHandler::onResult(QNetworkReply *reply) {
@@ -69,5 +100,7 @@ void GitlabHandler::onResult(QNetworkReply *reply) {
 }
 
 QNetworkReply *GitlabHandler::sendRequest(const QNetworkRequest &request) {
-  return m_networkManager->get(request);
+
+  // auto reply = co_await m_networkManager->get(request);
+  return nullptr;
 }

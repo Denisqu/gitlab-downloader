@@ -21,12 +21,16 @@ def main(*args):
     for arg in args:
         if arg in ['test', 'tests', 't']:
             exe = os.path.join(build_dir, 'core-tests.exe')
-
+    
     cmake_args = ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + build_dir]
     cmake_args += ['-G', 'Ninja']
 
+    for arg in args:
+        if arg in ['debug-find']:
+            cmake_args += '--debug-find'
+
     try:
-        p = subprocess.run(['cmake', ".", f'-B{build_dir}', '-D', 'CMAKE_BUILD_TYPE=Debug', '-DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON'] + cmake_args, check=True)
+        p = subprocess.run(['cmake', ".", f'-B{build_dir}', '-D', 'CMAKE_BUILD_TYPE=Debug', '-DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON', '-DCMAKE_PREFIX_PATH=C:\Program Files (x86)\qcoro'] + cmake_args, check=True)
         p = subprocess.run(['cmake', '--build', '.'], cwd=build_dir, check=True)
         print(p.stdout, colored(p.stderr, 'red'))
         proc = subprocess.Popen([exe, *args], cwd=build_dir, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)

@@ -1,8 +1,8 @@
 #include "../core/lib/corelib/gitlab_handler.hpp"
 #include "main_window.hpp"
-#include <ConsoleAppender.h>
-#include <FileAppender.h>
-#include <Logger.h>
+// #include <ConsoleAppender.h>
+// #include <FileAppender.h>
+// #include <Logger.h>
 #include <QApplication>
 #include <QDebug>
 #include <QFile>
@@ -24,11 +24,13 @@ int main(int argc, char **argv) {
 #endif
 
   // Logger
+  /*
   auto consoleAppender = std::make_unique<ConsoleAppender>();
   consoleAppender->setFormat("[%{type:-7}] <%{Function}> %{message}\n");
   cuteLogger->registerAppender(consoleAppender.get());
   auto fileAppender = std::make_unique<FileAppender>("widgets-impl.log");
   cuteLogger->registerAppender(fileAppender.get());
+  */
 
   QApplication app{argc, argv};
   MainWindow mainWindow{};
