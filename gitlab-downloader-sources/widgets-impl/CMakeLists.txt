@@ -1,9 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
-set(CMAKE_EXPORT_COMPILE_COMMANDS O)
 project(widgets-impl VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# add_subdirectory(libs/ml-lib)
 
 add_compile_definitions(_ALLOW_ITERATOR_DEBUG_LEVEL_MISMATCH)
 
@@ -12,7 +10,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
@@ -63,7 +61,7 @@ target_link_libraries(widgets-impl PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::Network
     Qt${QT_VERSION_MAJOR}::WebSockets
-    #CuteLogger
+    simple-logger
     core-lib
     db-lib
 )

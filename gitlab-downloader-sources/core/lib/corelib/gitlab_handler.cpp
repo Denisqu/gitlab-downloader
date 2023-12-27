@@ -24,9 +24,10 @@ auto future = QtFuture::connect(reply, &QNetworkReply::finished)
 namespace {
 QCoro::Task<> testTask() {
   QNetworkAccessManager *manager = new QNetworkAccessManager();
-  auto *reply = co_await manager->get(
-      QNetworkRequest{QStringLiteral("https://.../api/fetch")});
-  const auto data = reply->readAll();
+  auto *reply =
+      manager->get(QNetworkRequest{QStringLiteral("http://www.http2demo.io")});
+  const auto awaited_reply = co_await reply;
+  const auto data = awaited_reply->readAll();
   qDebug() << data;
   reply->deleteLater();
 }
@@ -79,7 +80,7 @@ GitlabHandler::GitlabHandler(QObject *parent)
 
       });
   */
-
+  qDebug() << "test!";
   /*
   auto request = [] {
     QUrl url("http://www.testingmcafeesites.com/index.html");

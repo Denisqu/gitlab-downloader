@@ -30,7 +30,7 @@ def main(*args):
             cmake_args += '--debug-find'
 
     try:
-        p = subprocess.run(['cmake', ".", f'-B{build_dir}', '-D', 'CMAKE_BUILD_TYPE=Debug', '-DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON', '-DCMAKE_PREFIX_PATH=C:\Program Files (x86)\qcoro'] + cmake_args, check=True)
+        p = subprocess.run(['cmake', ".", f'-B{build_dir}', '-D', 'CMAKE_BUILD_TYPE=Debug', '-DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON', '-DCMAKE_PREFIX_PATH=C:\Program Files (x86)\qcoro', '-DC=msvc', '-DCXX=msvc', '-DCMAKE_EXPORT_COMPILE_COMMANDS=1'] + cmake_args, check=True)
         p = subprocess.run(['cmake', '--build', '.'], cwd=build_dir, check=True)
         print(p.stdout, colored(p.stderr, 'red'))
         proc = subprocess.Popen([exe, *args], cwd=build_dir, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)

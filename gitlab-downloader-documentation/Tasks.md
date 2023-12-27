@@ -1,10 +1,6 @@
 ### Сейчас
-1) Изменить дефолтный компилятор на msvc
-1) Заставить cmake (либо питон) создавать compile_commands.json c msvc компилятором
-1) Линкануться к QCoro https://github.com/danvratil/qcoro
-1) Попробовать сделать то же самое с .then(), как с asyncfuture
+1) Redirect qDebug to SimpleLogger (https://www.francescmm.com/logging-with-qt/)
 1) Убрать asyncfuture
-1) Добавить новый логгер
 1) Написать логику для gitlab_handler.cpp с помощью QFuture (https://www.qt.io/blog/asynchronous-apis-in-qt-6, https://doc.qt.io/qt-6/qfuture.html#details), QPromise, TDD [ ]
 1) Написать логику для db_manager с помощью TDD (сделать как здесь: https://github.com/Denisqu/qt-cxx-reference-projects/blob/main/projects/ch03-gallery-core/gallery-core/DatabaseManager.cpp) [ ]
 
@@ -14,12 +10,15 @@
 
 ### Возможно уже не нужно
 1) Сделать Network запросы такими же как в ActionChain
+1) Попробовать сделать то же самое с .then(), как с asyncfuture
 
 ### Полезные Ресурсы для проекта
 1) QML Book: https://distracted-dijkstra-f5d508.netlify.app/
 
 ### Сделано
+1) Добавить новый логгер
 1) Успешно собрать MSVC_CXX20 + QCoro + CoroutineTest [+]
+1) Линкануться к QCoro https://github.com/danvratil/qcoro [+]
 1) Обновить Qt до 6.5 LTS [+]
 1) Разбить проект на 3 сабдиректории с CMake проектами: core, widgets-impl, qml-impl[+]
 1) Сделать реализацию наброска UI [+] 

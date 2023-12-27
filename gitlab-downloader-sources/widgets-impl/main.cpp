@@ -9,6 +9,8 @@
 #include <memory>
 #include <qapplication.h>
 
+#include "../external/simplelogger/logger.h"
+
 #ifdef _WIN32
 #include <Windows.h>
 #endif
@@ -22,16 +24,7 @@ int main(int argc, char **argv) {
   }
   qDebug() << "RUNNING APP IN DEBUG MODE...";
 #endif
-
-  // Logger
-  /*
-  auto consoleAppender = std::make_unique<ConsoleAppender>();
-  consoleAppender->setFormat("[%{type:-7}] <%{Function}> %{message}\n");
-  cuteLogger->registerAppender(consoleAppender.get());
-  auto fileAppender = std::make_unique<FileAppender>("widgets-impl.log");
-  cuteLogger->registerAppender(fileAppender.get());
-  */
-
+  auto logger = new Logger();
   QApplication app{argc, argv};
   MainWindow mainWindow{};
   mainWindow.show();
@@ -40,6 +33,9 @@ int main(int argc, char **argv) {
   qInfo() << "Starting the application!";
   auto result = app.exec();
   qInfo() << "Closing application!";
+
+  // TODO: перенести логгер в другой поток
+  logger->setParent(&app);
 
   if (result)
     qWarning() << "Something went wrong."
