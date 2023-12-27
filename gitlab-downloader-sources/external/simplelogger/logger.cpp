@@ -1,6 +1,10 @@
 #include "logger.h"
 #include "simpleQtLogger.h"
 #include <QApplication>
+#include <QMessageLogContext>
+#include <QString>
+#include <QtGlobal>
+#include <QtLogging>
 
 SIMPLELOGGER_EXPORT Logger::Logger() {
   // enable sinks
@@ -67,4 +71,25 @@ SIMPLELOGGER_EXPORT Logger::Logger() {
 
 void SIMPLELOGGER_EXPORT Logger::setParent(QObject *parent) {
   simpleqtlogger::SimpleQtLogger::getInstance()->setParent(parent);
+}
+
+void SIMPLELOGGER_EXPORT simpleMessageHandler(QtMsgType type,
+                                              const QMessageLogContext &context,
+                                              const QString &msg) {
+  Q_UNUSED(context);
+
+  switch (type) {
+  case QtDebugMsg:
+    L_DEBUG(msg);
+    break;
+  case QtWarningMsg:
+    L_WARN(msg);
+    break;
+  case QtCriticalMsg:
+    L_ERROR(msg);
+    break;
+  case QtFatalMsg:
+    L_FATAL(msg);
+    break;
+  }
 }

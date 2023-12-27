@@ -30,6 +30,7 @@ int main(int argc, char **argv) {
   mainWindow.show();
   auto gitlabHandler = new GitlabHandler(&app);
 
+  qInstallMessageHandler(simpleMessageHandler);
   qInfo() << "Starting the application!";
   auto result = app.exec();
   qInfo() << "Closing application!";
