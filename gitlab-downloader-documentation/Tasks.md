@@ -1,6 +1,6 @@
 ### Сейчас
+1) Добавить timeout для QNetworkRequest: void QNetworkRequest::setTransferTimeout(int timeout = DefaultTransferTimeoutConstant  [ ]
 1) Написать логику для gitlab_handler.cpp с помощью Coroutines, TDD [ ]
-1) Убрать asyncfuture
 1) Написать логику для db_manager с помощью TDD (сделать как здесь: https://github.com/Denisqu/qt-cxx-reference-projects/blob/main/projects/ch03-gallery-core/gallery-core/DatabaseManager.cpp) [ ]
 
 ### Потом
@@ -8,13 +8,14 @@
 1) Сделать наброс UI на FluentUI QML [ ]
 
 ### Возможно уже не нужно
-1) Сделать Network запросы такими же как в ActionChain
-1) Попробовать сделать то же самое с .then(), как с asyncfuture
+none
 
 ### Полезные Ресурсы для проекта
 1) QML Book: https://distracted-dijkstra-f5d508.netlify.app/
 
 ### Сделано
+1) Убрать asyncfuture [+]
+1) Собрать Qt 6.5.3  из исходников [+]
 1) Redirect qDebug to SimpleLogger (https://www.francescmm.com/logging-with-qt/) [+]
 1) Добавить новый логгер [+]
 1) Успешно собрать MSVC_CXX20 + QCoro + CoroutineTest [+]

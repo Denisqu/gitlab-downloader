@@ -61,7 +61,7 @@ target_link_libraries(widgets-impl PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::Network
     Qt${QT_VERSION_MAJOR}::WebSockets
-    simple-logger
+    CuteLogger
     core-lib
     db-lib
 )
