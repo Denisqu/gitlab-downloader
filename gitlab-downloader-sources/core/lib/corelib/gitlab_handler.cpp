@@ -10,16 +10,22 @@
 namespace {
 QCoro::Task<> testTask() {
   QNetworkAccessManager *manager = new QNetworkAccessManager();
-  auto *reply =
-      manager->get(QNetworkRequest{QStringLiteral("http://www.http2demo.io")});
-  const auto awaited_reply = co_await reply;
-  const auto data = awaited_reply->readAll();
-  qDebug() << data;
 
-  reply = manager->get(QNetworkRequest({"http://www.http2demo.io"}));
-  const auto awaited_reply_2 = co_await reply;
-  const auto data_2 = awaited_reply_2->readAll();
-  qDebug() << data;
+  auto firstRequest = QNetworkRequest{QStringLiteral(
+      "https://gitlab.com/api/v4/projects/470007/jobs?scope[]=success")};
+  firstRequest.setRawHeader(QByteArray("PRIVATE-TOKEN"),
+                            QByteArray("glpat-CWbvcjSxFMLAxuPdML2v"));
+
+  auto *reply = manager->get(firstRequest);
+  const auto awaited_reply = co_await reply;
+
+  if (reply->error()) {
+    qCritical() << reply->error();
+  }
+
+  qDebug() << "STATUS_CODE = "
+           << awaited_reply->attribute(QNetworkRequest::HttpStatusCodeAttribute)
+           << "DATA = " << awaited_reply->readAll();
 
   reply->deleteLater();
 }
@@ -27,8 +33,6 @@ QCoro::Task<> testTask() {
 
 GitlabHandler::GitlabHandler(QObject *parent)
     : m_networkManager(std::make_unique<QNetworkAccessManager>(this)) {
-
-  qDebug() << "test!";
   testTask();
 }
 
