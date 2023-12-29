@@ -20,3 +20,17 @@
 2023-12-29T17:26:29.491 [Error  ] <(anonymous namespace)::testTask> QNetworkReply::AuthenticationRequiredError
 2023-12-29T17:26:29.492 [Debug  ] <(anonymous namespace)::testTask> STATUS_CODE =  QVariant(int, 401) DATA =  "{\"message\":\"401 Unauthorized\"}"
 2023-12-29T17:27:15.649 [Info   ] <main> Closing application!
+2023-12-29T20:08:37.279 [Info   ] <main> Configuring application...
+2023-12-29T20:08:37.434 [Info   ] <(anonymous namespace)::getSecretKeyWithoutQCoro> file opened?:  false
+2023-12-29T20:08:37.434 [Warning] <checkWarnMessage> QIODevice::read (QFile, "key.txt"): device not open
+2023-12-29T20:08:37.435 [Info   ] <(anonymous namespace)::getSecretKeyWithoutQCoro> key before file closing =  ""
+2023-12-29T20:08:37.435 [Info   ] <(anonymous namespace)::getSecretKeyWithoutQCoro> GitlabPrivateKey =  ""
+2023-12-29T20:08:37.442 [Info   ] <DatabaseManager::getGitlabPrivateKey> file opened?:  false
+2023-12-29T20:08:37.442 [Warning] <checkWarnMessage> QIODevice::read (QFile, "key.txt"): device not open
+2023-12-29T20:08:37.443 [Warning] <checkWarnMessage> QIODevice::read (QFile, "key.txt"): device not open
+2023-12-29T20:08:37.443 [Info   ] <DatabaseManager::getGitlabPrivateKey> key before file closing =  ""
+2023-12-29T20:08:37.443 [Info   ] <DatabaseManager::getGitlabPrivateKey> GitlabPrivateKey =  ""
+2023-12-29T20:08:37.812 [Info   ] <main> Starting the application!
+2023-12-29T20:08:38.137 [Error  ] <(anonymous namespace)::testTask> QNetworkReply::AuthenticationRequiredError
+2023-12-29T20:08:38.137 [Debug  ] <(anonymous namespace)::testTask> STATUS_CODE =  QVariant(int, 401) DATA =  "{\"message\":\"401 Unauthorized\"}"
+2023-12-29T20:08:46.418 [Info   ] <main> Closing application!

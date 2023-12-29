@@ -1,4 +1,6 @@
 ### Сейчас
+1) Перенести логгер в свой поток.
+1) Решить проблему с тем, что лог не пишется от объектов в другом потоке.
 1) Добавить timeout для QNetworkRequest: void QNetworkRequest::setTransferTimeout(int timeout = DefaultTransferTimeoutConstant  [ ]
 1) Написать логику для gitlab_handler.cpp с помощью Coroutines, TDD [ ]
 1) Написать логику для db_manager с помощью TDD (сделать как здесь: https://github.com/Denisqu/qt-cxx-reference-projects/blob/main/projects/ch03-gallery-core/gallery-core/DatabaseManager.cpp) [ ]

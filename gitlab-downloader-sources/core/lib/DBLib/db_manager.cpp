@@ -26,7 +26,6 @@ QCoro::Task<QString> DatabaseManager::getGitlabPrivateKey() {
   file.setFileName("key.txt");
   file.open(QIODevice::ReadOnly | QIODevice::Text);
   qInfo() << "file opened?: " << file.isOpen();
-  file.readAll();
   const auto key = co_await file;
   file.close();
 
