@@ -2,6 +2,7 @@
 #define __GITLAB_HANDLER_H__
 
 #include "corelib-export.hpp"
+#include <QCoroNetworkReply>
 #include <QNetworkAccessManager>
 #include <QObject>
 

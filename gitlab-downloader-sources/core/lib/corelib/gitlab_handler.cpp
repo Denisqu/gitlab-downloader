@@ -1,5 +1,5 @@
 #include "gitlab_handler.hpp"
-#include <QCoroNetworkReply>
+#include "../DBLib/db_manager.hpp"
 #include <QFuture>
 #include <QNetworkReply>
 #include <QtConcurrent>
@@ -8,13 +8,16 @@
 #include <qnetworkrequest.h>
 
 namespace {
-QCoro::Task<> testTask() {
+QCoro::Task<void> testTask() {
   QNetworkAccessManager *manager = new QNetworkAccessManager();
 
   auto firstRequest = QNetworkRequest{QStringLiteral(
       "https://gitlab.com/api/v4/projects/470007/jobs?scope[]=success")};
-  firstRequest.setRawHeader(QByteArray("PRIVATE-TOKEN"),
-                            QByteArray("glpat-CWbvcjSxFMLAxuPdML2v"));
+
+  // co_await getGitlabPrivateKey()
+  const auto gitlabKey =
+      co_await DatabaseManager::instance().getGitlabPrivateKey();
+  firstRequest.setRawHeader(QByteArray("PRIVATE-TOKEN"), gitlabKey.toUtf8());
 
   auto *reply = manager->get(firstRequest);
   const auto awaited_reply = co_await reply;

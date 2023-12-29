@@ -1,5 +1,7 @@
 #include "db_manager.hpp"
-#include <QSqlDatabase>
+#include <QCoroIODevice>
+#include <QDebug>
+#include <QFile>
 
 DatabaseManager *DatabaseManager::m_instance = nullptr;
 
@@ -10,14 +12,27 @@ DatabaseManager::DatabaseManager(const QString &path)
   m_database->open();
 }
 
-DatabaseManager &
-DatabaseManager::init(const QString &path = DATABASE_FILENAME) {
+DatabaseManager &DatabaseManager::init(const QString &path) {
   if (m_instance == nullptr) {
     m_instance = new DatabaseManager(path);
     return *m_instance;
   }
 
   return *m_instance;
+}
+
+QCoro::Task<QString> DatabaseManager::getGitlabPrivateKey() {
+  QFile file;
+  file.setFileName("key.txt");
+  file.open(QIODevice::ReadOnly | QIODevice::Text);
+  qInfo() << "file opened?: " << file.isOpen();
+  file.readAll();
+  const auto key = co_await file;
+  file.close();
+
+  qInfo() << "GitlabPrivateKey = " << key;
+
+  co_return key;
 }
 
 DatabaseManager &DatabaseManager::instance() {
