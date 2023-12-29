@@ -15,22 +15,6 @@
 #include <Windows.h>
 #endif
 
-namespace {
-QString getSecretKeyWithoutQCoro() {
-  QFile file;
-  file.setFileName("key.txt");
-  file.open(QIODevice::ReadOnly | QIODevice::Text);
-  qInfo() << "file opened?: " << file.isOpen();
-  const auto key = file.readAll();
-  qInfo() << "key before file closing = " << key;
-  file.close();
-
-  qInfo() << "GitlabPrivateKey = " << key;
-
-  return key;
-}
-} // namespace
-
 int main(int argc, char **argv) {
 // attach console on win32
 #if defined(_WIN32) /*&& defined(DEBUG)*/
@@ -48,18 +32,15 @@ int main(int argc, char **argv) {
   cuteLogger->registerAppender(fileAppender);
 
   qInfo() << "Configuring application...";
-  std::cout << "test";
 
   QApplication app{argc, argv};
   MainWindow mainWindow{};
   mainWindow.show();
 
   QThread databaseManagerThread{&app};
-  // DatabaseManager::init();
-  // DatabaseManager::instance().moveToThread(&databaseManagerThread);
+  DatabaseManager::init();
+  DatabaseManager::instance().moveToThread(&databaseManagerThread);
   databaseManagerThread.start();
-
-  getSecretKeyWithoutQCoro();
 
   auto gitlabHandler = new GitlabHandler(&app);
 
