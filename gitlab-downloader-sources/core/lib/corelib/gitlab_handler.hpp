@@ -12,6 +12,7 @@ class CORELIB_EXPORT GitlabHandler : public QObject {
 
 public:
   explicit GitlabHandler(QObject *parent = nullptr);
+  Q_SLOT QCoro::Task<void> processTestReply(QNetworkReply *reply);
 
 private slots:
   void onResult(QNetworkReply *reply);
@@ -19,7 +20,6 @@ private slots:
 private:
   std::unique_ptr<QNetworkAccessManager> m_networkManager;
   QNetworkReply *sendRequest(const QNetworkRequest &request);
-  void processTestReply(QNetworkReply *reply);
 };
 
 #endif // __GITLAB_HANDLER_H__

@@ -16,8 +16,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
 set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Network WebSockets Sql )
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network WebSockets Sql)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets
+ Network WebSockets Sql Concurrent)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets
+ Network WebSockets Sql Concurrent)
 
 
 set(CMAKE_CXX_FLAGS_COVERAGE "${CMAKE_CXX_FLAGS_RELEASE} -fprofile-arcs -ftest-coverage")
@@ -62,6 +64,7 @@ target_link_libraries(widgets-impl PRIVATE
     Qt${QT_VERSION_MAJOR}::Network
     Qt${QT_VERSION_MAJOR}::WebSockets
     Qt${QT_VERSION_MAJOR}::Sql
+    Qt${QT_VERSION_MAJOR}::Concurrent
     CuteLogger
     core-lib
     db-lib

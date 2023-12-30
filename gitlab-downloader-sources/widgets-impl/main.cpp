@@ -8,6 +8,10 @@
 #include <QDebug>
 #include <QFile>
 #include <QThread>
+#include <QtConcurrent>
+#include <qnamespace.h>
+#include <qnetworkreply.h>
+#include <qobjectdefs.h>
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -35,12 +39,16 @@ int main(int argc, char **argv) {
   MainWindow mainWindow{};
   mainWindow.show();
 
-  QThread databaseManagerThread{&app};
   DatabaseManager::init();
+  auto *gitlabHandler = new GitlabHandler(&app);
+  QThread databaseManagerThread{&app};
   DatabaseManager::instance().moveToThread(&databaseManagerThread);
+  gitlabHandler->moveToThread(&databaseManagerThread);
   databaseManagerThread.start();
-
-  auto gitlabHandler = new GitlabHandler(&app);
+  QMetaObject::invokeMethod(
+      gitlabHandler,
+      [gitlabHandler]() { gitlabHandler->processTestReply(nullptr); },
+      Qt::QueuedConnection, static_cast<QNetworkReply *>(nullptr));
 
   qInfo() << "Starting the application!";
   auto result = app.exec();

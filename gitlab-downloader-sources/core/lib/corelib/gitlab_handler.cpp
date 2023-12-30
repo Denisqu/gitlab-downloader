@@ -1,12 +1,16 @@
 #include "gitlab_handler.hpp"
 #include "../DBLib/db_manager.hpp"
 #include <QFuture>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QNetworkReply>
 #include <QSet>
 #include <QtConcurrent>
 #include <qfuture.h>
+#include <qjsondocument.h>
 #include <qnetworkreply.h>
 #include <qnetworkrequest.h>
+#include <qstringview.h>
 
 namespace {
 
@@ -46,9 +50,12 @@ QCoro::Task<void> testTask() {
     co_return;
   }
 
+  const auto json = QJsonDocument::fromJson(reply->readAll());
+
   qInfo() << "STATUS_CODE = "
           << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute)
-          << "DATA = " << reply->readAll();
+          << "jobs count: " << json.array().count()
+          << " first job artifacts: " << json.array()[0][QString("artifacts")];
 
   reply->deleteLater();
   co_return;
@@ -57,11 +64,11 @@ QCoro::Task<void> testTask() {
 } // namespace
 
 GitlabHandler::GitlabHandler(QObject *parent)
-    : m_networkManager(std::make_unique<QNetworkAccessManager>(this)) {
-  testTask();
-}
+    : m_networkManager(std::make_unique<QNetworkAccessManager>(this)) {}
 
-void GitlabHandler::processTestReply(QNetworkReply *reply) {}
+QCoro::Task<void> GitlabHandler::processTestReply(QNetworkReply *reply) {
+  co_await testTask();
+}
 
 // TODO: возможно нужно удлаить эту функцию
 void GitlabHandler::onResult(QNetworkReply *reply) {
