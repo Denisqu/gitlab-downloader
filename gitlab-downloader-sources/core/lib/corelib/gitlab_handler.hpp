@@ -5,21 +5,30 @@
 #include <QCoroNetworkReply>
 #include <QNetworkAccessManager>
 #include <QObject>
+#include <qjsondocument.h>
+
+class QJsonDocument;
+
+namespace Gitlab {
+
+enum class JobScope { Success };
 
 // TODO: Переделать как здесь: https://www.qt.io/blog/asynchronous-apis-in-qt-6
-class CORELIB_EXPORT GitlabHandler : public QObject {
+class CORELIB_EXPORT Handler : public QObject {
   Q_OBJECT
 
 public:
-  explicit GitlabHandler(QObject *parent = nullptr);
+  explicit Handler(QObject *parent = nullptr);
   Q_SLOT QCoro::Task<void> processTestReply(QNetworkReply *reply);
-
-private slots:
-  void onResult(QNetworkReply *reply);
+  Q_SLOT QCoro::Task<QJsonDocument>
+  getJobsList(QString baseUrl, qint64 projectId, QSet<JobScope> scope);
+  Q_SLOT QCoro::Task<QJsonDocument>
+  downloadArtifacts(QString baseUrl, qint64 projectId, qint64 jobId);
 
 private:
   std::unique_ptr<QNetworkAccessManager> m_networkManager;
-  QNetworkReply *sendRequest(const QNetworkRequest &request);
 };
+
+} // namespace Gitlab
 
 #endif // __GITLAB_HANDLER_H__

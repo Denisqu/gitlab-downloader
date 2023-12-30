@@ -17,9 +17,10 @@
 
 namespace {
 
-enum class JobScope : unsigned int { Success = 1 };
+using namespace Gitlab;
 
-QString formatRequestJobs(qint64 projectId, QSet<JobScope> scope) {
+QString formatRequestJobs(QString baseUrl, qint64 projectId,
+                          QSet<JobScope> scope) {
   QString formatedScope = "";
   for (const auto &val : scope) {
     switch (val) {
@@ -31,30 +32,33 @@ QString formatRequestJobs(qint64 projectId, QSet<JobScope> scope) {
     }
   }
 
-  const auto requestString =
-      QString("https://gitlab.com/api/v4/projects/%1/jobs%2")
-          .arg(projectId)
-          .arg(formatedScope);
+  const auto requestString = QString("%1/api/v4/projects/%2/jobs%3")
+                                 .arg(baseUrl)
+                                 .arg(projectId)
+                                 .arg(formatedScope);
   qInfo() << "requestString = " << requestString;
 
   return requestString;
 }
 
-QString formatRequestJobArtifacts(qint64 projectId, qint64 jobId) {
-  const auto requestString =
-      QString("https://gitlab.com/api/v4/projects/%1/jobs/%2/artifacts")
-          .arg(projectId)
-          .arg(jobId);
+QString formatRequestJobArtifacts(QString baseUrl, qint64 projectId,
+                                  qint64 jobId) {
+  const auto requestString = QString("%1/api/v4/projects/%2/jobs/%3/artifacts")
+                                 .arg(baseUrl)
+                                 .arg(projectId)
+                                 .arg(jobId);
   qInfo() << "requestString = " << requestString;
 
   return requestString;
 }
 
+// TODO: убрать testTask, перенести всё в функции Handler
 QCoro::Task<void> testTask() {
   QNetworkAccessManager *manager = new QNetworkAccessManager();
 
   const auto firstRequest = []() -> QCoro::Task<QNetworkRequest> {
-    const auto requestString = formatRequestJobs(470007, {JobScope::Success});
+    const auto requestString =
+        formatRequestJobs("https://gitlab.com", 470007, {JobScope::Success});
     auto request = QNetworkRequest{requestString};
     const auto gitlabKey =
         co_await DatabaseManager::instance().getGitlabPrivateKey();
@@ -84,8 +88,8 @@ QCoro::Task<void> testTask() {
 
   const auto artifactsDownloadRequest =
       [jobId]() -> QCoro::Task<QNetworkRequest> {
-    const auto requestString =
-        formatRequestJobArtifacts(470007, jobId.toInteger());
+    const auto requestString = formatRequestJobArtifacts(
+        "https://gitlab.com", 470007, jobId.toInteger());
     auto request = QNetworkRequest{requestString};
     const auto gitlabKey =
         co_await DatabaseManager::instance().getGitlabPrivateKey();
@@ -116,20 +120,48 @@ QCoro::Task<void> testTask() {
 
 } // namespace
 
-GitlabHandler::GitlabHandler(QObject *parent)
+namespace Gitlab {
+
+Handler::Handler(QObject *parent)
     : m_networkManager(std::make_unique<QNetworkAccessManager>(this)) {}
 
-QCoro::Task<void> GitlabHandler::processTestReply(QNetworkReply *reply) {
+QCoro::Task<void> Handler::processTestReply(QNetworkReply *reply) {
   co_await testTask();
 }
 
-// TODO: возможно нужно удлаить эту функцию
-void GitlabHandler::onResult(QNetworkReply *reply) {
-  qInfo() << "read reply from onResult:";
-  qInfo() << reply->readAll();
+QCoro::Task<QJsonDocument>
+Handler::getJobsList(QString baseUrl, qint64 projectId, QSet<JobScope> scope) {
+  const auto request = [baseUrl, projectId,
+                        scope]() -> QCoro::Task<QNetworkRequest> {
+    const auto requestString = formatRequestJobs(baseUrl, projectId, scope);
+    auto request = QNetworkRequest{requestString};
+    const auto gitlabKey =
+        co_await DatabaseManager::instance().getGitlabPrivateKey();
+    request.setRawHeader(QByteArray("PRIVATE-TOKEN"), gitlabKey.toUtf8());
+    co_return request;
+  }();
+  auto *reply = m_networkManager->get(co_await request);
+
+  reply = co_await reply;
+
+  if (reply->error()) {
+    qCritical() << reply->error();
+    co_return QJsonDocument();
+  }
+
+  const auto json = QJsonDocument::fromJson(reply->readAll());
+
+  qInfo() << "STATUS_CODE = "
+          << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute)
+          << "jobs count: " << json.array().count();
+
+  reply->deleteLater();
+  co_return json;
 }
 
-QNetworkReply *GitlabHandler::sendRequest(const QNetworkRequest &request) {
-  // auto reply = co_await m_networkManager->get(request);
-  return nullptr;
+Q_SLOT QCoro::Task<QJsonDocument>
+Handler::downloadArtifacts(QString baseUrl, qint64 projectId, qint64 jobId) {
+  co_return QJsonDocument();
 }
+
+} // namespace Gitlab

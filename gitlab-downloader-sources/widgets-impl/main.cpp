@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
   mainWindow.show();
 
   DatabaseManager::init();
-  auto *gitlabHandler = new GitlabHandler(&app);
+  auto *gitlabHandler = new Gitlab::Handler(&app);
   QThread databaseManagerThread{&app};
   DatabaseManager::instance().moveToThread(&databaseManagerThread);
   gitlabHandler->moveToThread(&databaseManagerThread);
