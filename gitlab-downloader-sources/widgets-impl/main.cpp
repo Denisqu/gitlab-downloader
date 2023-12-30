@@ -9,8 +9,6 @@
 #include <QFile>
 #include <QThread>
 
-#include "iostream"
-
 #ifdef _WIN32
 #include <Windows.h>
 #endif
