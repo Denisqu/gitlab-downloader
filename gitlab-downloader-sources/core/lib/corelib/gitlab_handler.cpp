@@ -1,13 +1,11 @@
 #include "gitlab_handler.hpp"
 #include "../DBLib/db_manager.hpp"
 #include <QFuture>
-#include <QJsonDocument>
 #include <QJsonObject>
 #include <QNetworkReply>
 #include <QSet>
 #include <QtConcurrent>
 #include <chrono>
-#include <numeric>
 #include <qfuture.h>
 #include <qjsondocument.h>
 #include <qnetworkreply.h>
@@ -15,50 +13,17 @@
 #include <qstringview.h>
 #include <qtypes.h>
 
-namespace {
+namespace Gitlab {
 
-using namespace Gitlab;
+Handler::Handler(QObject *parent)
+    : m_networkManager(std::make_unique<QNetworkAccessManager>(this)) {}
 
-QString formatRequestJobs(QString baseUrl, qint64 projectId,
-                          QSet<JobScope> scope) {
-  QString formatedScope = "";
-  for (const auto &val : scope) {
-    switch (val) {
-    case JobScope::Success:
-      formatedScope += "?scope[]=success";
-      break;
-    default:
-      break;
-    }
-  }
-
-  const auto requestString = QString("%1/api/v4/projects/%2/jobs%3")
-                                 .arg(baseUrl)
-                                 .arg(projectId)
-                                 .arg(formatedScope);
-  qInfo() << "requestString = " << requestString;
-
-  return requestString;
-}
-
-QString formatRequestJobArtifacts(QString baseUrl, qint64 projectId,
-                                  qint64 jobId) {
-  const auto requestString = QString("%1/api/v4/projects/%2/jobs/%3/artifacts")
-                                 .arg(baseUrl)
-                                 .arg(projectId)
-                                 .arg(jobId);
-  qInfo() << "requestString = " << requestString;
-
-  return requestString;
-}
-
-// TODO: убрать testTask, перенести всё в функции Handler
-QCoro::Task<void> testTask() {
+QCoro::Task<void> Handler::processTestReply(QNetworkReply *reply) {
   QNetworkAccessManager *manager = new QNetworkAccessManager();
 
-  const auto firstRequest = []() -> QCoro::Task<QNetworkRequest> {
-    const auto requestString =
-        formatRequestJobs("https://gitlab.com", 470007, {JobScope::Success});
+  const auto firstRequest = [this]() -> QCoro::Task<QNetworkRequest> {
+    const auto requestString = formatter.formatRequestJobs(
+        "https://gitlab.com", 470007, {JobScope::Success});
     auto request = QNetworkRequest{requestString};
     const auto gitlabKey =
         co_await DatabaseManager::instance().getGitlabPrivateKey();
@@ -87,8 +52,8 @@ QCoro::Task<void> testTask() {
   qInfo() << "jobId = " << jobId << "jobId.toInteger() = " << jobId.toInteger();
 
   const auto artifactsDownloadRequest =
-      [jobId]() -> QCoro::Task<QNetworkRequest> {
-    const auto requestString = formatRequestJobArtifacts(
+      [this, jobId]() -> QCoro::Task<QNetworkRequest> {
+    const auto requestString = formatter.formatRequestJobArtifacts(
         "https://gitlab.com", 470007, jobId.toInteger());
     auto request = QNetworkRequest{requestString};
     const auto gitlabKey =
@@ -118,22 +83,12 @@ QCoro::Task<void> testTask() {
   co_return;
 }
 
-} // namespace
-
-namespace Gitlab {
-
-Handler::Handler(QObject *parent)
-    : m_networkManager(std::make_unique<QNetworkAccessManager>(this)) {}
-
-QCoro::Task<void> Handler::processTestReply(QNetworkReply *reply) {
-  co_await testTask();
-}
-
 QCoro::Task<QJsonDocument>
 Handler::getJobsList(QString baseUrl, qint64 projectId, QSet<JobScope> scope) {
-  const auto request = [baseUrl, projectId,
-                        scope]() -> QCoro::Task<QNetworkRequest> {
-    const auto requestString = formatRequestJobs(baseUrl, projectId, scope);
+  const auto request = [baseUrl, projectId, scope,
+                        this]() -> QCoro::Task<QNetworkRequest> {
+    const auto requestString =
+        formatter.formatRequestJobs(baseUrl, projectId, scope);
     auto request = QNetworkRequest{requestString};
     const auto gitlabKey =
         co_await DatabaseManager::instance().getGitlabPrivateKey();

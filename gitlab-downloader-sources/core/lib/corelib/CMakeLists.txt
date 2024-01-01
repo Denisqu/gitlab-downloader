@@ -17,6 +17,7 @@ find_package(QCoro6 REQUIRED COMPONENTS Core Network Coro)
 add_library(core-lib SHARED
   corelib-export.hpp
   gitlab_handler.cpp gitlab_handler.hpp
+  request_formatter.cpp request_formatter.hpp 
 )
 
 qcoro_enable_coroutines()

@@ -2,12 +2,11 @@
 #define __GITLAB_HANDLER_H__
 
 #include "corelib-export.hpp"
+#include "request_formatter.hpp"
 #include <QCoroNetworkReply>
+#include <QJsonDocument>
 #include <QNetworkAccessManager>
 #include <QObject>
-#include <qjsondocument.h>
-
-class QJsonDocument;
 
 namespace Gitlab {
 
@@ -27,6 +26,7 @@ public:
 
 private:
   std::unique_ptr<QNetworkAccessManager> m_networkManager;
+  RequestFormatter formatter;
 };
 
 } // namespace Gitlab
