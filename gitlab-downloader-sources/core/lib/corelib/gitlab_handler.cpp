@@ -1,7 +1,10 @@
 #include "gitlab_handler.hpp"
 #include "../DBLib/db_manager.hpp"
+// #include <QCoroNetworkReply>
 #include <QFuture>
+#include <QJsonDocument>
 #include <QJsonObject>
+#include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QSet>
 #include <QtConcurrent>
@@ -16,7 +19,10 @@
 namespace Gitlab {
 
 Handler::Handler(QObject *parent)
-    : m_networkManager(std::make_unique<QNetworkAccessManager>(this)) {}
+    : m_networkManager(std::make_unique<QNetworkAccessManager>(this)),
+      model(this) {}
+
+Handler::~Handler() = default;
 
 QCoro::Task<void> Handler::processTestReply(QNetworkReply *reply) {
   QNetworkAccessManager *manager = new QNetworkAccessManager();
@@ -82,6 +88,8 @@ QCoro::Task<void> Handler::processTestReply(QNetworkReply *reply) {
   secondReply->deleteLater();
   co_return;
 }
+
+MainTableModel &Handler::getModel() { return model; }
 
 QCoro::Task<QJsonDocument>
 Handler::getJobsList(QString baseUrl, qint64 projectId, QSet<JobScope> scope) {

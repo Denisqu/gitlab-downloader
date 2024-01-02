@@ -1,10 +1,10 @@
 #ifndef __REQUEST_FORMATTER_H__
 #define __REQUEST_FORMATTER_H__
 
+#include <QtGlobal>
+
 class QString;
 template <typename T> class QSet;
-// class qint64;
-#include <QtGlobal>
 
 namespace Gitlab {
 

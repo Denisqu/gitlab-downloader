@@ -1,4 +1,5 @@
 ### Сейчас
+1) Сделать Model+View заготовку для будущей реализации главного экрана [ ] 
 1) Перенести логгер в свой поток. [ ]
 1) Отделить RequestFormatter в отдельную сущность, чтобы было легче тестировать (TDD) [ ]
 1) Добавить timeout для QNetworkRequest: void QNetworkRequest::setTransferTimeout(int timeout = DefaultTransferTimeoutConstant  [ ]

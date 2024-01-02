@@ -1,7 +1,7 @@
 #include "request_formatter.hpp"
 #include "gitlab_handler.hpp"
+#include <QDebug>
 #include <QString>
-#include <QtGlobal>
 
 namespace Gitlab {
 QString RequestFormatter::formatRequestJobs(QString baseUrl, qint64 projectId,

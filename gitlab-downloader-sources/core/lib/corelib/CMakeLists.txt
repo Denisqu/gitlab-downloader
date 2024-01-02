@@ -18,6 +18,7 @@ add_library(core-lib SHARED
   corelib-export.hpp
   gitlab_handler.cpp gitlab_handler.hpp
   request_formatter.cpp request_formatter.hpp 
+  main_table_model.hpp main_table_model.cpp
 )
 
 qcoro_enable_coroutines()

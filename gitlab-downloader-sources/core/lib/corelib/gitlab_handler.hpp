@@ -2,11 +2,14 @@
 #define __GITLAB_HANDLER_H__
 
 #include "corelib-export.hpp"
+#include "main_table_model.hpp"
 #include "request_formatter.hpp"
 #include <QCoroNetworkReply>
 #include <QJsonDocument>
-#include <QNetworkAccessManager>
 #include <QObject>
+
+class QJsonDocument;
+class QNetworkReply;
 
 namespace Gitlab {
 
@@ -18,6 +21,8 @@ class CORELIB_EXPORT Handler : public QObject {
 
 public:
   explicit Handler(QObject *parent = nullptr);
+  ~Handler();
+  MainTableModel &getModel();
   Q_SLOT QCoro::Task<void> processTestReply(QNetworkReply *reply);
   Q_SLOT QCoro::Task<QJsonDocument>
   getJobsList(QString baseUrl, qint64 projectId, QSet<JobScope> scope);
@@ -27,6 +32,7 @@ public:
 private:
   std::unique_ptr<QNetworkAccessManager> m_networkManager;
   RequestFormatter formatter;
+  MainTableModel model;
 };
 
 } // namespace Gitlab

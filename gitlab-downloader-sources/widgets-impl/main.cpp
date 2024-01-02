@@ -39,23 +39,9 @@ int main(int argc, char **argv) {
   MainWindow mainWindow{};
   mainWindow.show();
 
-  DatabaseManager::init();
-  auto *gitlabHandler = new Gitlab::Handler(&app);
-  QThread databaseManagerThread{&app};
-  DatabaseManager::instance().moveToThread(&databaseManagerThread);
-  gitlabHandler->moveToThread(&databaseManagerThread);
-  databaseManagerThread.start();
-  QMetaObject::invokeMethod(
-      gitlabHandler,
-      [gitlabHandler]() { gitlabHandler->processTestReply(nullptr); },
-      Qt::QueuedConnection, static_cast<QNetworkReply *>(nullptr));
-
   qInfo() << "Starting the application!";
   auto result = app.exec();
   qInfo() << "Closing application!";
-
-  databaseManagerThread.quit();
-  databaseManagerThread.wait();
 
   if (result)
     qWarning() << "Something went wrong."
