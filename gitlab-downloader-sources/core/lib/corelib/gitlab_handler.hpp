@@ -22,7 +22,7 @@ class CORELIB_EXPORT Handler : public QObject {
 public:
   explicit Handler(QObject *parent = nullptr);
   ~Handler();
-  MainTableModel &getModel();
+  MainTableModel *getModel();
   Q_SLOT QCoro::Task<void> processTestReply(QNetworkReply *reply);
   Q_SLOT QCoro::Task<QJsonDocument>
   getJobsList(QString baseUrl, qint64 projectId, QSet<JobScope> scope);

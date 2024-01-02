@@ -5,6 +5,7 @@
 #include <QStackedWidget>
 #include <QThread>
 #include <QVBoxLayout>
+#include <qabstractitemmodel.h>
 #include <qboxlayout.h>
 #include <qlabel.h>
 #include <qobject.h>
@@ -19,7 +20,9 @@ MainWindow::MainWindow(QWidget *parent)
   QStackedWidget *centralStackedWidget =
       qobject_cast<QStackedWidget *>(centralWidget());
 
-  const auto mainScreenWidget = new MainScreenWidget();
+  const auto mainScreenWidget = new MainScreenWidget(this);
+  mainScreenWidget->setMainModel(
+      static_cast<QAbstractItemModel *>(handler->getModel()));
 
   // only for debug
   connect(mainScreenWidget, &MainScreenWidget::settingsButtonClicked,

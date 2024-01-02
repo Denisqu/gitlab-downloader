@@ -1,6 +1,7 @@
 #include "main_screen_widget.hpp"
 #include <QListView>
 #include <QPushButton>
+#include <qabstractitemmodel.h>
 #include <qboxlayout.h>
 #include <qlabel.h>
 #include <qnamespace.h>
@@ -9,15 +10,18 @@
 #include <qsizepolicy.h>
 
 MainScreenWidget::MainScreenWidget(QWidget *parent) : QWidget(parent) {
-
   setLayout(createRootLayout());
+}
+
+void MainScreenWidget::setMainModel(QAbstractItemModel *model) {
+  listView->setModel(model);
 }
 
 QLayout *MainScreenWidget::createRootLayout() {
   const auto rootLayout = [this]() {
     const auto layout = new QVBoxLayout();
 
-    const auto listView = new QListView();
+    listView = new QListView();
 
     layout->addLayout(createTopLayout());
     layout->addWidget(listView);

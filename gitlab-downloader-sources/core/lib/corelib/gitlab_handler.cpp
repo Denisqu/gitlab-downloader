@@ -1,6 +1,7 @@
 #include "gitlab_handler.hpp"
 #include "../DBLib/db_manager.hpp"
 // #include <QCoroNetworkReply>
+#include <QCoroFuture>
 #include <QFuture>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -78,7 +79,7 @@ QCoro::Task<void> Handler::processTestReply(QNetworkReply *reply) {
     if (data.isEmpty())
       break;
     qDebug() << "bytes written: " << data.size();
-    file.write(data);
+    co_await QtConcurrent::run([&file, &data]() mutable { file.write(data); });
   }
 
   qDebug() << "file downloading is finished!";
@@ -89,7 +90,7 @@ QCoro::Task<void> Handler::processTestReply(QNetworkReply *reply) {
   co_return;
 }
 
-MainTableModel &Handler::getModel() { return model; }
+MainTableModel *Handler::getModel() { return &model; }
 
 QCoro::Task<QJsonDocument>
 Handler::getJobsList(QString baseUrl, qint64 projectId, QSet<JobScope> scope) {
