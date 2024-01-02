@@ -1,6 +1,7 @@
 #include "main_screen_widget.hpp"
 #include <QListView>
 #include <QPushButton>
+#include <QTableView>
 #include <qabstractitemmodel.h>
 #include <qboxlayout.h>
 #include <qlabel.h>
@@ -14,17 +15,17 @@ MainScreenWidget::MainScreenWidget(QWidget *parent) : QWidget(parent) {
 }
 
 void MainScreenWidget::setMainModel(QAbstractItemModel *model) {
-  listView->setModel(model);
+  tableView->setModel(model);
 }
 
 QLayout *MainScreenWidget::createRootLayout() {
   const auto rootLayout = [this]() {
     const auto layout = new QVBoxLayout();
 
-    listView = new QListView();
+    tableView = new QTableView(this);
 
     layout->addLayout(createTopLayout());
-    layout->addWidget(listView);
+    layout->addWidget(tableView);
     layout->addLayout(createBottomLayout());
 
     return layout;
@@ -60,7 +61,7 @@ QLayout *MainScreenWidget::createBottomLayout() {
     const auto layout = new QHBoxLayout();
     const auto refreshAllButton = new QPushButton("Refresh all");
     const auto downloadNewArtifactsButton =
-        new QPushButton("Download New Artifacts");
+        new QPushButton("Download Selected Artifacts");
 
     layout->addStretch();
     layout->addWidget(refreshAllButton);

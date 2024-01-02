@@ -7,7 +7,7 @@
 #include <qobjectdefs.h>
 #include <qpushbutton.h>
 
-class QListView;
+class QTableView;
 class QPushButton;
 
 class MainScreenWidget : public QWidget {
@@ -26,7 +26,7 @@ private:
   QLayout *createBottomLayout();
   QPushButton *createSettingsButton();
 
-  QListView *listView = nullptr;
+  QTableView *tableView = nullptr;
 };
 
 #endif // __MAIN_SCREEN_WIDGET_H__

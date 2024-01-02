@@ -1,6 +1,5 @@
 #include "gitlab_handler.hpp"
 #include "../DBLib/db_manager.hpp"
-// #include <QCoroNetworkReply>
 #include <QCoroFuture>
 #include <QFuture>
 #include <QJsonDocument>
