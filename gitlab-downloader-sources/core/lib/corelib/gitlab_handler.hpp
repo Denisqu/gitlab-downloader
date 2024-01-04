@@ -13,6 +13,11 @@ class QNetworkReply;
 
 namespace Gitlab {
 
+struct ArtifactInfo {
+  qint64 size = 0;
+  QString name = "None";
+};
+
 enum class JobScope { Success };
 
 // TODO: Переделать как здесь: https://www.qt.io/blog/asynchronous-apis-in-qt-6
@@ -26,8 +31,9 @@ public:
   Q_SLOT QCoro::Task<void> processTestReply(QNetworkReply *reply);
   Q_SLOT QCoro::Task<QJsonDocument>
   getJobsList(QString baseUrl, qint64 projectId, QSet<JobScope> scope);
-  Q_SLOT QCoro::Task<QJsonDocument>
-  downloadArtifacts(QString baseUrl, qint64 projectId, qint64 jobId);
+  Q_SLOT QCoro::Task<bool> downloadArtifacts(QString baseUrl, qint64 projectId,
+                                             qint64 jobId,
+                                             const ArtifactInfo &info);
 
 private:
   std::unique_ptr<QNetworkAccessManager> m_networkManager;

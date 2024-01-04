@@ -25,67 +25,18 @@ Handler::Handler(QObject *parent)
 Handler::~Handler() = default;
 
 QCoro::Task<void> Handler::processTestReply(QNetworkReply *reply) {
-  QNetworkAccessManager *manager = new QNetworkAccessManager();
 
-  const auto firstRequest = [this]() -> QCoro::Task<QNetworkRequest> {
-    const auto requestString = formatter.formatRequestJobs(
-        "https://gitlab.com", 470007, {JobScope::Success});
-    auto request = QNetworkRequest{requestString};
-    const auto gitlabKey =
-        co_await DatabaseManager::instance().getGitlabPrivateKey();
-    request.setRawHeader(QByteArray("PRIVATE-TOKEN"), gitlabKey.toUtf8());
-    co_return request;
-  }();
-  auto *firstReply = manager->get(co_await firstRequest);
+  auto joblistJson = co_await this->getJobsList("https://gitlab.com", 470007,
+                                                {JobScope::Success});
 
-  // Получаем ответ на запрос на последние джобы
-  firstReply = co_await firstReply;
-
-  if (firstReply->error()) {
-    qCritical() << firstReply->error();
-    co_return;
-  }
-
-  const auto json = QJsonDocument::fromJson(firstReply->readAll());
-
-  qInfo() << "STATUS_CODE = "
-          << firstReply->attribute(QNetworkRequest::HttpStatusCodeAttribute)
-          << "jobs count: " << json.array().count()
-          << " first job artifacts: " << json.array()[0][QString("artifacts")];
-
-  // Качаем артефакт, пишем артефакт в файл:
-  const auto jobId = json[0][QString("id")];
+  const auto jobId = joblistJson[0][QString("id")];
   qInfo() << "jobId = " << jobId << "jobId.toInteger() = " << jobId.toInteger();
+  const auto &artifactsFileJson = joblistJson[0][QString("artifacts_file")];
+  ArtifactInfo info{artifactsFileJson["size"].toInteger(),
+                    artifactsFileJson["filename"].toString()};
+  auto isDownloaded = co_await this->downloadArtifacts(
+      "https://gitlab.com", 470007, jobId.toInteger(), info);
 
-  const auto artifactsDownloadRequest =
-      [this, jobId]() -> QCoro::Task<QNetworkRequest> {
-    const auto requestString = formatter.formatRequestJobArtifacts(
-        "https://gitlab.com", 470007, jobId.toInteger());
-    auto request = QNetworkRequest{requestString};
-    const auto gitlabKey =
-        co_await DatabaseManager::instance().getGitlabPrivateKey();
-    request.setRawHeader(QByteArray("PRIVATE-TOKEN"), gitlabKey.toUtf8());
-    co_return request;
-  }();
-
-  QFile file("downloadFile.zip");
-  file.open(QIODevice::ReadWrite);
-  auto *secondReply = manager->get(co_await artifactsDownloadRequest);
-
-  while (true) {
-    const auto data =
-        co_await qCoro(secondReply).read(1024, std::chrono::seconds(120));
-    if (data.isEmpty())
-      break;
-    qDebug() << "bytes written: " << data.size();
-    co_await QtConcurrent::run([&file, &data]() mutable { file.write(data); });
-  }
-
-  qDebug() << "file downloading is finished!";
-  file.close();
-
-  firstReply->deleteLater();
-  secondReply->deleteLater();
   co_return;
 }
 
@@ -122,9 +73,47 @@ Handler::getJobsList(QString baseUrl, qint64 projectId, QSet<JobScope> scope) {
   co_return json;
 }
 
-Q_SLOT QCoro::Task<QJsonDocument>
-Handler::downloadArtifacts(QString baseUrl, qint64 projectId, qint64 jobId) {
-  co_return QJsonDocument();
+Q_SLOT QCoro::Task<bool> Handler::downloadArtifacts(QString baseUrl,
+                                                    qint64 projectId,
+                                                    qint64 jobId,
+                                                    const ArtifactInfo &info) {
+  const auto artifactsDownloadRequest =
+      [this, jobId]() -> QCoro::Task<QNetworkRequest> {
+    const auto requestString = formatter.formatRequestJobArtifacts(
+        "https://gitlab.com", 470007, jobId);
+    auto request = QNetworkRequest{requestString};
+    const auto gitlabKey =
+        co_await DatabaseManager::instance().getGitlabPrivateKey();
+    request.setRawHeader(QByteArray("PRIVATE-TOKEN"), gitlabKey.toUtf8());
+    co_return request;
+  }();
+
+  QFile file(info.name);
+  file.open(QIODevice::ReadWrite);
+  auto *reply = m_networkManager->get(co_await artifactsDownloadRequest);
+
+  qint64 bytesWritten = 0;
+  while (true) {
+    const auto data =
+        co_await qCoro(reply).read(1024 * 10, std::chrono::seconds(120));
+    if (data.isEmpty())
+      break;
+    bytesWritten += data.size();
+    qDebug() << "Bytes written: " << bytesWritten << "/" << info.size;
+    co_await QtConcurrent::run([&file, &data]() mutable { file.write(data); });
+  }
+  file.close();
+  reply->deleteLater();
+
+  bool downloadResultStatus = info.size == bytesWritten ? true : false;
+  qDebug() << "File downloading is finished. Status = " << downloadResultStatus;
+
+  if (!downloadResultStatus) {
+    qInfo() << "File downloading wasn't successful. Deleting file...";
+    file.remove();
+  }
+
+  co_return downloadResultStatus;
 }
 
 } // namespace Gitlab

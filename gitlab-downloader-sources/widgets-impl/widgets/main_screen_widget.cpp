@@ -1,4 +1,5 @@
 #include "main_screen_widget.hpp"
+#include <QHeaderView>
 #include <QListView>
 #include <QPushButton>
 #include <QTableView>
@@ -23,6 +24,7 @@ QLayout *MainScreenWidget::createRootLayout() {
     const auto layout = new QVBoxLayout();
 
     tableView = new QTableView(this);
+    tableView->horizontalHeader()->setStretchLastSection(true);
 
     layout->addLayout(createTopLayout());
     layout->addWidget(tableView);

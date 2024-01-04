@@ -6,7 +6,7 @@ MainTableModel::MainTableModel(QObject *parent) : QAbstractTableModel(parent) {}
 
 int MainTableModel::rowCount(const QModelIndex &parent) const { return 2; }
 
-int MainTableModel::columnCount(const QModelIndex &parent) const { return 3; }
+int MainTableModel::columnCount(const QModelIndex &parent) const { return 4; }
 
 QVariant MainTableModel::data(const QModelIndex &index, int role) const {
   if (role == Qt::DisplayRole)
@@ -34,6 +34,8 @@ QVariant MainTableModel::headerData(int section, Qt::Orientation orientation,
       return QString("Project");
     case 2:
       return QString("Date");
+    case 3:
+      return QString("Status");
     }
   }
   return QVariant();
