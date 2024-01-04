@@ -1,5 +1,5 @@
 ### Сейчас
-1) Выделить интерфейсы: IReplyHandler, IRequestFormatter
+1) Выделить интерфейс: IRequestFormatter
 1) Написать тесты для Gitlab::RequestFormatter
 1) Переписать Gitlab::Handler, чтобы его можно было протестировать (возможно с помощью mock-объектов)
 1) Написать логику для gitlab_handler.cpp с помощью Coroutines, TDD [ ]
@@ -16,6 +16,7 @@ none
 1) QML Book: https://distracted-dijkstra-f5d508.netlify.app/
 
 ### Сделано
+1) Выделить интерфейс: IReplyHandler 
 1) Отделить RequestFormatter в отдельную сущность, чтобы было легче тестировать (TDD) [+]
 1) Сделать Model+View заготовку для будущей реализации главного экрана [+] 
 1) Решить проблему с тем, что лог не пишется от объектов в другом потоке. [+]
