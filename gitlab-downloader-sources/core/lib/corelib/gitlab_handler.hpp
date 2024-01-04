@@ -1,8 +1,10 @@
 #ifndef __GITLAB_HANDLER_H__
 #define __GITLAB_HANDLER_H__
 
+#include "artifact_info.hpp"
 #include "corelib-export.hpp"
 #include "main_table_model.hpp"
+#include "reply_handler.hpp"
 #include "request_formatter.hpp"
 #include <QCoroNetworkReply>
 #include <QJsonDocument>
@@ -13,19 +15,14 @@ class QNetworkReply;
 
 namespace Gitlab {
 
-struct ArtifactInfo {
-  qint64 size = 0;
-  QString name = "None";
-};
-
 enum class JobScope { Success };
 
-// TODO: Переделать как здесь: https://www.qt.io/blog/asynchronous-apis-in-qt-6
 class CORELIB_EXPORT Handler : public QObject {
   Q_OBJECT
 
 public:
-  explicit Handler(QObject *parent = nullptr);
+  explicit Handler(QObject *parent = nullptr,
+                   IReplyHandler *replyHandler = new ReplyHandler());
   ~Handler();
   MainTableModel *getModel();
   Q_SLOT QCoro::Task<void> processTestReply(QNetworkReply *reply);
@@ -39,6 +36,9 @@ private:
   std::unique_ptr<QNetworkAccessManager> m_networkManager;
   RequestFormatter formatter;
   MainTableModel model;
+
+  // TODO: изменить на std::unique_ptr
+  IReplyHandler *m_replyHandler;
 };
 
 } // namespace Gitlab

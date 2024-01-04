@@ -19,6 +19,8 @@ add_library(core-lib SHARED
   gitlab_handler.cpp gitlab_handler.hpp
   request_formatter.cpp request_formatter.hpp 
   main_table_model.hpp main_table_model.cpp
+  reply_handler_interface.hpp
+  reply_handler.hpp reply_handler.cpp
 )
 
 qcoro_enable_coroutines()

@@ -1,4 +1,7 @@
 ### Сейчас
+1) Выделить интерфейсы: IReplyHandler, IRequestFormatter
+1) Написать тесты для Gitlab::RequestFormatter
+1) Переписать Gitlab::Handler, чтобы его можно было протестировать (возможно с помощью mock-объектов)
 1) Написать логику для gitlab_handler.cpp с помощью Coroutines, TDD [ ]
 1) Написать логику для db_manager с помощью TDD (сделать как здесь: https://github.com/Denisqu/qt-cxx-reference-projects/blob/main/projects/ch03-gallery-core/gallery-core/DatabaseManager.cpp) [ ]
 

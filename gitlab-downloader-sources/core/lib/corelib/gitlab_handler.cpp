@@ -18,9 +18,9 @@
 
 namespace Gitlab {
 
-Handler::Handler(QObject *parent)
+Handler::Handler(QObject *parent, IReplyHandler *replyHandler)
     : m_networkManager(std::make_unique<QNetworkAccessManager>(this)),
-      model(this) {}
+      m_replyHandler(replyHandler), model(this) {}
 
 Handler::~Handler() = default;
 
@@ -56,14 +56,8 @@ Handler::getJobsList(QString baseUrl, qint64 projectId, QSet<JobScope> scope) {
   }();
   auto *reply = m_networkManager->get(co_await request);
 
-  reply = co_await reply;
-
-  if (reply->error()) {
-    qCritical() << reply->error();
-    co_return QJsonDocument();
-  }
-
-  const auto json = QJsonDocument::fromJson(reply->readAll());
+  const auto json =
+      (co_await m_replyHandler->handleGetJobListReply(reply)).toJsonDocument();
 
   qInfo() << "STATUS_CODE = "
           << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute)
@@ -88,32 +82,13 @@ Q_SLOT QCoro::Task<bool> Handler::downloadArtifacts(QString baseUrl,
     co_return request;
   }();
 
-  QFile file(info.name);
-  file.open(QIODevice::ReadWrite);
   auto *reply = m_networkManager->get(co_await artifactsDownloadRequest);
-
-  qint64 bytesWritten = 0;
-  while (true) {
-    const auto data =
-        co_await qCoro(reply).read(1024 * 10, std::chrono::seconds(120));
-    if (data.isEmpty())
-      break;
-    bytesWritten += data.size();
-    qDebug() << "Bytes written: " << bytesWritten << "/" << info.size;
-    co_await QtConcurrent::run([&file, &data]() mutable { file.write(data); });
-  }
-  file.close();
+  const auto result =
+      (co_await m_replyHandler->handleDownloadArtifactsReply(reply, info))
+          .toBool();
   reply->deleteLater();
 
-  bool downloadResultStatus = info.size == bytesWritten ? true : false;
-  qDebug() << "File downloading is finished. Status = " << downloadResultStatus;
-
-  if (!downloadResultStatus) {
-    qInfo() << "File downloading wasn't successful. Deleting file...";
-    file.remove();
-  }
-
-  co_return downloadResultStatus;
+  co_return result;
 }
 
 } // namespace Gitlab
