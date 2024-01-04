@@ -1,4 +1,6 @@
 ### Сейчас
+1) Заменить gtest на QTest (https://doc.qt.io/qt-6.5/qtest-tutorial.html) и QCoroTest (https://doc.qt.io/qt-6.5/qtest-tutorial.html) 
+1) Написать тесты для Gitlab::ReplyHandler
 1) Выделить интерфейс: IRequestFormatter
 1) Написать тесты для Gitlab::RequestFormatter
 1) Переписать Gitlab::Handler, чтобы его можно было протестировать (возможно с помощью mock-объектов)

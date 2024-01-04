@@ -6,4 +6,4 @@ protected:
   virtual void TearDown() override {}
 };
 
-TEST_F(DBLibTests, test0) { EXPECT_EQ(true, false); }
+// TEST_F(DBLibTests, test0) { EXPECT_EQ(true, false); }

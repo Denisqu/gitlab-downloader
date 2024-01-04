@@ -15,20 +15,21 @@ ReplyHandler::handleDownloadArtifactsReply(QNetworkReply *reply,
   qint64 bytesWritten = 0;
   while (true) {
     const auto data =
-        co_await qCoro(reply).read(1024 * 10, std::chrono::seconds(120));
+        co_await qCoro(reply).read(1024, std::chrono::seconds(120));
     if (data.isEmpty())
       break;
     bytesWritten += data.size();
-    qDebug() << "Bytes written: " << bytesWritten << "/" << info.size;
+    qInfo() << "KiB written: " << bytesWritten / 1024 << "/"
+            << info.size / 1024;
     co_await QtConcurrent::run([&file, &data]() mutable { file.write(data); });
   }
   file.close();
 
   bool downloadResultStatus = info.size == bytesWritten ? true : false;
-  qDebug() << "File downloading is finished. Status = " << downloadResultStatus;
+  qInfo() << "File downloading is finished. Status = " << downloadResultStatus;
 
   if (!downloadResultStatus) {
-    qInfo() << "File downloading wasn't successful. Deleting file...";
+    qWarning() << "File downloading wasn't successful. Deleting file...";
     file.remove();
   }
 

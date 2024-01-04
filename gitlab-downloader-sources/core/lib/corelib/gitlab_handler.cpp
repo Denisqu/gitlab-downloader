@@ -8,7 +8,6 @@
 #include <QNetworkReply>
 #include <QSet>
 #include <QtConcurrent>
-#include <chrono>
 #include <qfuture.h>
 #include <qjsondocument.h>
 #include <qnetworkreply.h>
